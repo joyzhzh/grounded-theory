@@ -93,6 +93,12 @@ The Operator accepted these on 2026-09-02 ("others can follow your rec"):
   provider with version history, named in `.vault-root` on each machine,
   with one offline copy before any package submission.
 
+## Pasteable session prompts
+
+`FIRE_PROMPTS__20260902.md` carries one self-contained prompt per order for
+a fresh Codex producer session. They only get a session to this memo; this
+memo governs.
+
 ## Bootstrap on any machine
 
 ```bash
