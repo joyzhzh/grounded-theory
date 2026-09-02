@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/joyzhzh/grounded-theory/schemas/analysis-packet.schema.json",
-  "title": "Grounded Theory Cycle Manifest",
+  "$id": "https://github.com/joyzhzh/grounded-theory/schemas/manifest.schema.json",
+  "title": "Grounded Theory cycle manifest",
   "type": "object",
   "additionalProperties": true,
   "required": [
@@ -19,17 +19,11 @@
     "schema_version": {"const": "0.1-phase-a"},
     "study_id": {"type": "string", "minLength": 1},
     "cycle_id": {"type": "string", "pattern": "^C[0-9]{3,}$"},
-    "created_at_utc": {"type": "string", "minLength": 1},
+    "created_at_utc": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
     "input_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "protocol_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "analysis_status": {"enum": ["WORKING", "SUBMITTED_FOR_REVIEW"]},
     "release_status": {"const": "NON_RELEASE"},
-    "saturation_status": {
-      "enum": [
-        "NOT_ASSESSED",
-        "NOT_REACHED",
-        "PROVISIONAL_SUFFICIENCY_CANDIDATE"
-      ]
-    }
+    "saturation_status": {"enum": ["NOT_ASSESSED", "NOT_REACHED", "PROVISIONAL_SUFFICIENCY_CANDIDATE"]}
   }
 }

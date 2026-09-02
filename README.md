@@ -97,6 +97,8 @@ python3 scripts/validate_analysis_packet.py examples/synthetic/C001
 ./scripts/doctor.sh
 ```
 
+The validator applies the row schemas in `schemas/` and therefore needs the
+`jsonschema` package (`python3 -m pip install jsonschema`).
 `examples/synthetic/C001` is the invented fixture the tests copy. The doctor
 script checks only that `.vault-root` resolves to an absolute, untracked path
 outside this repository with no `.git` inside it. A repository-boundary test

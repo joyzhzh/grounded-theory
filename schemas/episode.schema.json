@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joyzhzh/grounded-theory/schemas/episode.schema.json",
+  "title": "Grounded Theory realization episode",
+  "type": "object",
+  "required": ["episode_id", "boundary_basis", "outcome_status", "source_refs"],
+  "properties": {
+    "episode_id": {"type": "string", "pattern": "^E[0-9]{3,}$"},
+    "boundary_basis": {"enum": ["SOURCE_EXPLICIT", "ANALYST_RECONSTRUCTED", "UNCERTAIN"]},
+    "outcome_status": {"enum": ["ACCEPTED", "TRANSFORMED", "SUBSTITUTED", "DECOMPOSED", "POSTPONED", "ABANDONED", "UNKNOWN"]},
+    "source_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^MNF-[A-Z0-9-]+$"}
+    },
+    "note": {"type": "string"}
+  }
+}

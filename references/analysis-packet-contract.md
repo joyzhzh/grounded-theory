@@ -63,6 +63,28 @@ Each row has `request_id`, `discriminating_question`, nonempty `targets`,
 `AUTHORIZED`, `RETURNED`, or `CLOSED`. The tool may propose; only the
 appropriate authority may authorize collection.
 
+## Row schemas and cross-file rules
+
+Row shapes are defined once, in `schemas/*.schema.json` (one schema per
+packet file), and the validator applies them with `jsonschema`. Identity
+formats are fixed: `E###` episodes, `I###` incidents, `CDE###` codes,
+`MEM###` memos, `CAT###` categories, `REQ###` requests, and `MNF-…`
+manifestations minted by the study vault. Timestamps are ISO-8601 UTC with a
+`Z` suffix.
+
+The validator adds only what a per-row schema cannot express:
+
+- identities are unique within their file;
+- every cited incident, code, episode, or negative case exists in the packet,
+  and a basis list never cites its own incident;
+- ordinals are unique within an episode;
+- an incident's source manifestation is among its episode's `source_refs`;
+- supersession is explicit: a successor row carries `supersedes` and
+  `supersession_reason`, a `RETIRED` row carries `retirement_reason`, and a
+  row marked `SUPERSEDED` inside a packet has its successor in that packet;
+- a sampling request with status `AUTHORIZED`, `RETURNED`, or `CLOSED`
+  names its `authority_ref`; the tool itself may only write `PROPOSED`.
+
 ## Validator ceiling
 
 `validate_analysis_packet.py` checks structure and referential integrity. Its
