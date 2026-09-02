@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-02
 **Decision state:** architecture draft; superseded for authority by `START_HERE__20260902.md` (fire orders issued 2026-09-02)
-**Provenance correction, 2026-09-02:** the pilot dataset is open-sourced third-party production-trace data, not the Operator's own traces; rulings 4 and 5 in the START memo govern its use
+**Provenance correction, 2026-09-02:** the pilot dataset is open-sourced third-party production-trace data, not data the Operator produced; rulings 4 and 5 in the START memo govern its use
 **Repository:** `joyzhzh/grounded-theory`
 **First intended study:** creative realization through probabilistic AIGC
 

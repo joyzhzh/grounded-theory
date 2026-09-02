@@ -47,8 +47,8 @@ Numbered as in `STATUS.md`, "Blocking decisions before a live pilot".
    provenance). The open-sourced production-trace dataset the Operator
    holds: a group of creators using mainly Seedance to produce a
    feature-length film, with detailed per-attempt traces. It is third-party
-   public data under its published license, not the Operator's own work
-   product. Pilot input: two or three complete episodes chosen for contrast,
+   public data under its published license, not data the Operator
+   produced. Pilot input: two or three complete episodes chosen for contrast,
    at least one accepted and at least one abandoned or transformed, plus one
    with an unknown ending if one exists. Before any coding the worker records
    the dataset's name, source URL, license identifier, license-file hash, and
