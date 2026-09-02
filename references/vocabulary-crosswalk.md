@@ -6,9 +6,10 @@ therefore unified only where the concept is the same and cross-walked where it
 is not. Nothing in this page maps automatically; a mapped value is an
 analytical judgment recorded in the cycle.
 
-**Vault revision observed:** `joyzhzh/aigc-chouka-evidence@3e5534ddcc60f70c379f9ddc813898b9a2378637`
-(the vault adopts the unified `boundary_basis` term and the `request_id`
-package field at its next revision; re-observe after that push).
+**Vault revision observed:** `joyzhzh/aigc-chouka-evidence@666213124bfc633ed74cf3767add572059757693`
+(package schema `0.3-phase-a`: unified `boundary_basis`, `request_id` and
+`request_sha256` on the package, `lane_handoffs` binding the protocol's
+three-file worker handoff, and `conflicts_with` on records).
 
 ## Unified terms
 
