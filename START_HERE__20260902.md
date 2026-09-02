@@ -15,7 +15,7 @@ Two fire orders are live and may run in parallel in separate sessions:
 
 | Order | Scope | Fires now |
 |---|---|---|
-| A | `GT-PILOT-C001`: one exploratory pilot-code cycle on the Operator's own Seedance-era traces | yes |
+| A | `GT-PILOT-C001`: one exploratory pilot-code cycle on the open-sourced Seedance feature-film production traces the Operator holds | yes |
 | B | `GT-M02`: the grounded-theory methods and tooling Scout campaign, backlog card `C30`, rank 1 | yes |
 | C | `GT-M01`: the Evidence-First methods mission | no; fires after B lands or closes with limitations |
 
@@ -43,19 +43,29 @@ Numbered as in `STATUS.md`, "Blocking decisions before a live pilot".
    first specification or attempt addressed to a nameable intended outcome
    and ends in one of the packet's outcome states, or `UNKNOWN` when the
    trace ends without one. Every episode records its `boundary_basis`.
-4. **Dataset.** The Operator's own Seedance-era generation traces. Pilot
-   input: two or three complete episodes chosen for contrast, at least one
-   accepted and at least one abandoned or transformed, plus one with an
-   unknown ending if one exists. The worker hashes the exact snapshot into
-   the input manifest; no hash is pre-declared here.
-5. **Data authority.** The traces are the Operator's own work product and
-   may be analyzed. Any third-party identifier, face, voice, handle, client
-   material, or bystander content is redacted in the normalized layer before
-   any model reads it. Raw media never leaves the vault. Model processing is
-   permitted only on normalized text or event exports, and the exact models
-   used are recorded in `MANIFEST.json` under `model_processing` with
-   `authority_ref` `GT-RULING-2026-09-02-05`. Retention: vault only; erasure
-   by later ruling.
+4. **Dataset** (revised 2026-09-02 after the Operator corrected its
+   provenance). The open-sourced production-trace dataset the Operator
+   holds: a group of creators using mainly Seedance to produce a
+   feature-length film, with detailed per-attempt traces. It is third-party
+   public data under its published license, not the Operator's own work
+   product. Pilot input: two or three complete episodes chosen for contrast,
+   at least one accepted and at least one abandoned or transformed, plus one
+   with an unknown ending if one exists. Before any coding the worker records
+   the dataset's name, source URL, license identifier, license-file hash, and
+   retrieved snapshot hash in `INPUT_MANIFEST.json`; no hash is pre-declared
+   here. The Operator holds the dataset and its terms and ruled that this
+   does not gate the pilot.
+5. **Data authority** (revised 2026-09-02). Basis: the dataset's open-source
+   license as published, recorded in the input manifest; if the license
+   cannot be identified, record `license: UNKNOWN` and continue rather than
+   `HOLD`, since every output is `NON_RELEASE`. Data minimization still
+   applies: creators are referred to by the dataset's own identifiers, no
+   face or voice is extracted beyond what an incident needs, and nothing
+   outside the dataset is joined to it. Raw media never leaves the vault.
+   Model processing, including cloud models, is permitted on normalized text
+   or event exports, and the exact models used are recorded in
+   `MANIFEST.json` under `model_processing` with `authority_ref`
+   `GT-RULING-2026-09-02-05R`. Retention: vault only.
 6. **Pins and seats.** Protocol
    `joyzhzh/evidence-first-deep-research-v2@fa6cc2e2f93136d2d7b5d29a3b5d5b3e7d445e1d`
    is ratified for both orders. The Scout method is the lean skill vendored
@@ -63,9 +73,25 @@ Numbered as in `STATUS.md`, "Blocking decisions before a live pilot".
    adopted. `tool_revision` is the grounded-theory commit checked out at fire.
    Producer is the fired session. Reviewer or supervisor is a fresh session
    that did not produce the artifact, a different vendor when available.
+   Accepted default (2026-09-02): producer sessions run on Codex, where the
+   skill installs; reviewer, supervisor, and auditor sessions run on Claude.
 7. **Approvals.** Order A with its reviewer role and Order B with its
    supervisor role are approved with the ceilings below.
 8. **Beyond exploratory.** No. Every output is `NON_RELEASE`.
+
+## Accepted defaults (2026-09-02)
+
+The Operator accepted these on 2026-09-02 ("others can follow your rec"):
+
+- **Seats.** Producer on Codex; reviewer, supervisor, and auditor on Claude.
+- **Firing order.** All three orders across the two repositories may run in
+  parallel. If capacity is tight: Order A, then Order B, then the vault's
+  `ACE-M00-L01`.
+- **Cloud model processing** of normalized exports: permitted, recorded in
+  the manifest.
+- **Vault.** One directory outside every Git repository on a synchronized
+  provider with version history, named in `.vault-root` on each machine,
+  with one offline copy before any package submission.
 
 ## Bootstrap on any machine
 
@@ -97,7 +123,8 @@ deliverable that matters most.
    into `raw/SHA256SUMS`.
 2. Normalize each trace into an event export under `normalized/`, minting
    manifestation identities `MNF-GTPILOT-001` onward. Each export names its
-   raw source hash. Redact per ruling 5 before any model reads the export.
+   raw source hash. Apply ruling 5's minimization before any model reads the
+   export.
 3. Write `normalized/INPUT_MANIFEST.json` listing every manifestation, its
    raw and normalized hashes, and redaction notes. Its SHA-256 is the
    manifest's `input_manifest_sha256`.
