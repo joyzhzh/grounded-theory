@@ -8,9 +8,10 @@
   "protocol_entrypoint": "DUAL_MODEL_DEEP_RESEARCH_BOILERPLATE_V2.md",
   "standalone_mission_template": "PROTOCOL_KIT_V2/01_EXECUTOR_COMMANDER_TEMPLATE.md",
   "pin_intent": "exact remote snapshot selected for Phase A architecture; not an alias for current main",
-  "use": "architecture-draft-only",
-  "campaign_fire_authorized": false,
+  "use": "fire-authorized for the scopes in START_HERE__20260902.md (GT-PILOT-C001, GT-M02); architecture-draft otherwise",
+  "campaign_fire_authorized": true,
   "vendored": false,
   "submodule": false,
-  "update_policy": "immutable pin; re-authenticate and obtain Operator ratification before any live study"
+  "update_policy": "immutable pin; re-authenticate and obtain Operator ratification before any live study",
+  "fire_authority": "Operator ruling, delegated 2026-09-02; see START_HERE__20260902.md"
 }

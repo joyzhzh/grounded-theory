@@ -3,6 +3,9 @@
 This repository contains a grounded-theory research program and reusable tool,
 not live study data or automatically admitted research evidence.
 
+- Read `START_HERE__20260902.md` first; it carries the current rulings and
+  fire orders. No other file authorizes work.
+
 - Never commit private traces, prompts from a real project, source captures,
   transcripts, audiovisual files, personal data, credentials, or restricted
   material.

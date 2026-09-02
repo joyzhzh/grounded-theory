@@ -10,8 +10,9 @@
   "planned_campaign_path": "campaigns/<run-date>__grounded-theory-methods-tooling",
   "execution_method": "lean sota-repository-scout skill pinned within the Evidence-First protocol revision",
   "controller_adoption_authorized": false,
-  "campaign_fire_authorized": false,
+  "campaign_fire_authorized": true,
   "result_exists": false,
-  "landing_authorized": false,
-  "note": "The observed Scout main is a supervised-beta landing repository, not a qualified execution pin. Freeze actual revisions again before fire and landing."
+  "landing_authorized": "conditional: FULL validator PASS, non-producing supervisor gate, single-writer landing per PROTOCOL.md",
+  "note": "The observed Scout main is a supervised-beta landing repository, not a qualified execution pin. Freeze actual revisions again before fire and landing.",
+  "fire_authority": "Operator ruling, delegated 2026-09-02; see START_HERE__20260902.md Order B"
 }

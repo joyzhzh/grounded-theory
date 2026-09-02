@@ -1,6 +1,6 @@
 # Research agenda
 
-**State:** `UNFIRED — PHASE A ARCHITECTURE DRAFT`
+**State:** `FIRE ORDERS ISSUED 2026-09-02 — NOT EXECUTED` (see [START_HERE__20260902.md](START_HERE__20260902.md))
 **Proposed program:** Grounded Theory
 **Proposed missions:** `GT-M01`, `GT-M02`
 

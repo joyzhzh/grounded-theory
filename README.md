@@ -8,8 +8,8 @@ negative-case analysis, and provenance-bound paper drafting and handoff.
 
 ## Current state
 
-- **Repository state:** `UNFIRED — PHASE A ARCHITECTURE DRAFT`
-- **Proposed research missions:** 2; neither fired
+- **Repository state:** `FIRE ORDERS ISSUED 2026-09-02 — NOT EXECUTED` (see [START_HERE__20260902.md](START_HERE__20260902.md))
+- **Research missions:** 2; fire orders issued for `GT-M02` and the exploratory pilot `GT-PILOT-C001`; nothing executed
 - **Skill state:** structural prototype; no live study has run
 - **Real data ingested:** none
 - **Categories or theory produced:** none

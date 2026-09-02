@@ -1,9 +1,9 @@
 # Mission portfolio — Grounded Theory
 
-**State:** `UNFIRED — PHASE A ARCHITECTURE DRAFT`
+**State:** `FIRE ORDERS ISSUED 2026-09-02 — NOT EXECUTED` (see [START_HERE__20260902.md](START_HERE__20260902.md))
 **Proposed program:** `GT-01`
 **Mission count:** 2
-**Fired missions:** 0
+**Fired missions:** 0 executed; fire order issued for `GT-M02` on 2026-09-02
 
 This portfolio turns the two research needs into separate missions with
 different evidentiary authority. `GT-M01` has stable Evidence-First worker

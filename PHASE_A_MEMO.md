@@ -1,7 +1,7 @@
 # Phase A memo — Grounded Theory
 
 **Date:** 2026-09-02
-**Decision state:** architecture draft; unfired
+**Decision state:** architecture draft; superseded for authority by `START_HERE__20260902.md` (fire orders issued 2026-09-02)
 **Repository:** `joyzhzh/grounded-theory`
 **First intended study:** creative realization through probabilistic AIGC
 
