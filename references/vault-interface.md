@@ -2,23 +2,27 @@
 
 ## Sampling request to evidence vault
 
-The grounded-theory tool sends a bounded request containing:
+The grounded-theory tool sends one `SAMPLING_REQUESTS.jsonl` row that
+conforms to [schemas/sampling-request.schema.json](../schemas/sampling-request.schema.json):
+request ID, provisional focus and the packet identities it rests on,
+discriminating question, targets (`SUPPORT`, `CONTRADICTION`, `BOUNDARY`,
+`RIVAL`, `NEGATIVE_CASE`), eligible source classes, languages, date range,
+creators, workflow regimes, restrictions, counter-search, resource ceiling,
+stop rule, claim ceiling, and required return fields. The vault cites the same
+schema by hash; shared terms are in
+[vocabulary-crosswalk.md](vocabulary-crosswalk.md).
 
-- request ID and provisional category or relationship;
-- discriminating question;
-- support, contradiction, boundary, rival, or negative-case targets;
-- eligible source classes, languages, periods, and regimes;
-- lawful-access and processing constraints;
-- stop rule and claim ceiling; and
-- required return fields.
-
-This is a proposal, not acquisition authority.
+This is a proposal, not acquisition authority. Only a status of `PROPOSED` may
+be written by the tool; every later status names its `authority_ref`.
 
 ## Evidence return
 
 The evidence vault returns an immutable package lock with:
 
+- the `request_id` it answers;
 - exact vault snapshot and package-manifest hash;
+- the lane handoffs it projects, each bound by the hashes of the protocol's
+  `records.jsonl`, `report.md`, and `searchlog.md`;
 - source and manifestation IDs and hashes;
 - episode/event IDs, locators, and epistemic classes;
 - quotation, translation, rights, privacy, and access state;

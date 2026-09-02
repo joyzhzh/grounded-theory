@@ -39,10 +39,13 @@ or `PROVISIONAL_SUFFICIENCY_CANDIDATE`, never a saturation claim.
 
 ## Episodes
 
-Each row has `boundary_basis` (`SOURCE_EXPLICIT`, `ANALYST_RECONSTRUCTED`,
+Each row has `boundary_basis` (`SOURCE_EXPLICIT`, `RECONSTRUCTED`,
 `UNCERTAIN`), `outcome_status` (`ACCEPTED`, `TRANSFORMED`, `SUBSTITUTED`,
 `DECOMPOSED`, `POSTPONED`, `ABANDONED`, `UNKNOWN`), and nonempty
-`source_refs` of manifestation identities.
+`source_refs` of manifestation identities. An episode reconstructed from a
+vault package may carry `derived_from` naming the `PKG-` package and `EPI-`
+episodes; see [vocabulary-crosswalk.md](vocabulary-crosswalk.md) for how the
+vault's descriptive outcome relates to the analytical one.
 
 ## Incidents
 
@@ -57,6 +60,8 @@ exactly one `epistemic_class`, and `description`.
 - `ANALYST_INFERENCE` requires `inference_basis_ids`; `THEORETICAL_CONSTRUCT`
   requires `construct_basis_ids`. Both cite existing incidents or codes and
   never the incident itself.
+- An incident reconstructed from a vault event may carry
+  `derived_from_event_id` (`EVT-…`).
 
 ## Codes
 
@@ -93,10 +98,17 @@ one identity. A memo is an argument, never evidence.
 
 ## Sampling requests
 
-Each row has `discriminating_question`, nonempty `targets`, `counter_search`,
-`stop_rule`, `claim_ceiling`, and `status`. The tool writes only `PROPOSED`;
-`AUTHORIZED`, `RETURNED`, and `CLOSED` require an `authority_ref` naming the
-decision that changed the status.
+A request is the one contract shared with the evidence vault and is defined
+in `schemas/sampling-request.schema.json`: `provisional_focus` and the
+`focus_ids` (existing categories or comparisons) it rests on,
+`discriminating_question`, `targets` from `SUPPORT`, `CONTRADICTION`,
+`BOUNDARY`, `RIVAL`, `NEGATIVE_CASE`, `eligible_source_classes`, `languages`,
+`date_range`, `creators`, `workflow_regimes` (the vault's regime vocabulary),
+`restrictions`, `counter_search`, `resource_ceiling`, `stop_rule`,
+`claim_ceiling`, `required_return_fields`, and `status`. The tool writes only
+`PROPOSED`; `AUTHORIZED`, `RETURNED`, and `CLOSED` require an `authority_ref`
+naming the decision that changed the status, and `RETURNED` names the
+`returned_package_id`.
 
 ## Cross-file rules
 

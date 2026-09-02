@@ -234,6 +234,11 @@ def validate_packet(root: Path) -> None:
             require(case_id in case_ids, f"{loc}: negative_case_ids cites unknown incident or episode {case_id}")
     check_lifecycle("CATEGORY_MEMOS.jsonl", category_memos, "memo_id")
 
+    for row in sampling:
+        loc = where("SAMPLING_REQUESTS.jsonl", row)
+        for focus in row.get("focus_ids", []):
+            require(focus in category_ids or focus in comparisons_by_id, f"{loc}: focus_ids cites unknown category or comparison {focus}")
+
     referable_ids = comparable_ids | set(comparisons_by_id) | set(category_memos_by_id) | set(requests_by_id)
     for row in memos:
         loc = where("MEMOS.jsonl", row)

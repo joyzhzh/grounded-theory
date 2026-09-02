@@ -27,7 +27,7 @@ theoretical sampling.
   rival, boundary, or negative case.
 
 Episode boundaries must record whether they are source-explicit,
-analyst-reconstructed, or uncertain.
+reconstructed, or uncertain.
 
 ## Coding
 

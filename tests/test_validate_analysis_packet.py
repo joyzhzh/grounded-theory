@@ -274,6 +274,55 @@ class AnalysisPacketValidationTest(unittest.TestCase):
         write_jsonl(packet / "MEMOS.jsonl", memos)
         self.assert_fails(packet, "unknown identity")
 
+    # --- interface stage: shared request contract, unified boundary basis ---
+
+    def test_request_target_outside_vocabulary_fails(self) -> None:
+        packet = self.make_packet()
+        requests = read_jsonl(packet / "SAMPLING_REQUESTS.jsonl")
+        requests[0]["targets"] = ["more examples"]
+        write_jsonl(packet / "SAMPLING_REQUESTS.jsonl", requests)
+        self.assert_fails(packet, "targets")
+
+    def test_request_requires_source_classes_languages_and_ceiling(self) -> None:
+        for field in ("eligible_source_classes", "languages", "resource_ceiling", "restrictions"):
+            with self.subTest(field=field):
+                packet = self.make_packet()
+                requests = read_jsonl(packet / "SAMPLING_REQUESTS.jsonl")
+                requests[0].pop(field)
+                write_jsonl(packet / "SAMPLING_REQUESTS.jsonl", requests)
+                self.assert_fails(packet, field)
+
+    def test_request_focus_must_exist_in_packet(self) -> None:
+        packet = self.make_packet()
+        requests = read_jsonl(packet / "SAMPLING_REQUESTS.jsonl")
+        requests[0]["focus_ids"] = ["CAT999"]
+        write_jsonl(packet / "SAMPLING_REQUESTS.jsonl", requests)
+        self.assert_fails(packet, "focus_ids")
+
+    def test_returned_request_names_its_package(self) -> None:
+        packet = self.make_packet()
+        requests = read_jsonl(packet / "SAMPLING_REQUESTS.jsonl")
+        requests[0].update({"status": "RETURNED", "authority_ref": "SYNTHETIC-RULING-001"})
+        write_jsonl(packet / "SAMPLING_REQUESTS.jsonl", requests)
+        self.assert_fails(packet, "returned_package_id")
+        requests[0]["returned_package_id"] = "PKG-SYNTHETIC"
+        write_jsonl(packet / "SAMPLING_REQUESTS.jsonl", requests)
+        self.assert_passes(packet)
+
+    def test_old_boundary_basis_term_is_rejected(self) -> None:
+        packet = self.make_packet()
+        episodes = read_jsonl(packet / "EPISODES.jsonl")
+        episodes[0]["boundary_basis"] = "ANALYST_RECONSTRUCTED"
+        write_jsonl(packet / "EPISODES.jsonl", episodes)
+        self.assert_fails(packet, "boundary_basis")
+
+    def test_derived_from_links_must_use_vault_prefixes(self) -> None:
+        packet = self.make_packet()
+        episodes = read_jsonl(packet / "EPISODES.jsonl")
+        episodes[1]["derived_from"] = {"package_id": "not-a-package", "episode_ids": ["EPI-SYNTHETIC"]}
+        write_jsonl(packet / "EPISODES.jsonl", episodes)
+        self.assert_fails(packet, "derived_from")
+
     def test_manifestation_identity_must_be_mnf_prefixed(self) -> None:
         packet = self.make_packet()
         episodes = read_jsonl(packet / "EPISODES.jsonl")

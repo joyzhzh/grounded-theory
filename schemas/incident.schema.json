@@ -95,6 +95,11 @@
         "type": "string",
         "pattern": "^(I|CDE)[0-9]{3,}$"
       }
+    },
+    "derived_from_event_id": {
+      "type": "string",
+      "pattern": "^EVT-[A-Z0-9-]+$",
+      "description": "optional link to the vault event this incident was reconstructed from"
     }
   },
   "allOf": [
