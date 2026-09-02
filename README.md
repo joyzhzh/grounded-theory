@@ -93,8 +93,14 @@ quality or theory.
 
 ```bash
 python3 -m unittest discover -s tests -v
-python3 scripts/validate_analysis_packet.py /path/to/C001
+python3 scripts/validate_analysis_packet.py examples/synthetic/C001
+./scripts/doctor.sh
 ```
+
+`examples/synthetic/C001` is the invented fixture the tests copy. The doctor
+script checks only that `.vault-root` resolves to an absolute, untracked path
+outside this repository with no `.git` inside it. A repository-boundary test
+fails if any media, capture, or oversized file is ever tracked.
 
 ## License
 

@@ -104,7 +104,7 @@ methodological validity, license compatibility, or acquisition authority.
 
 ## Bundle and landing
 
-Produce only the lean bundle:
+The validator-bound core is the lean bundle:
 
 ```text
 SCOPE.md
@@ -115,11 +115,20 @@ FINDINGS.md
 SHA256SUMS
 ```
 
-Validate from the pinned lean Scout skill, obtain independent review, then land
-only the exact accepted six-file bundle under the canonical Scout repository
-path. Verify the remote tree, commit, and manifest after push. Campaign-level
-prose belongs outside the validator-bound directory unless a later Scout
-contract explicitly changes its allowlist.
+Validate it from the pinned lean Scout skill and obtain independent review.
+Landing then follows the canonical Scout repository's own `PROTOCOL.md`, not
+this plan: §1 requires the non-producing supervisor's gate record inside the
+campaign folder before landing, §3 seals the folder, §4 names a single writer,
+and §9 places machine-readable QA receipts in an `acceptance/` subdirectory
+that sits outside the bundle-hash file set. The `bundle_sha256` printed by a
+FULL validator PASS is the hash of record and must equal the value QA
+accepted. Verify the remote tree, commit, and `INDEX.md` row after push.
+
+Open question for the Scout repository, not for this plan: the pinned lean
+validator fails on any unexpected top-level file, while `PROTOCOL.md` §1 wants
+the gate record inside the folder. Landed campaigns carry a top-level
+`GATE_LOG.md`, so the validator is evidently run before the gate record is
+added. Freeze that order in the fire instruction rather than assuming it.
 
 The canonical Scout repository's current `main` is supervised beta and is not
 an execution-method qualification. This plan uses the lean skill pinned by the

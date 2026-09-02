@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -10,6 +11,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 VALIDATOR = ROOT / "scripts" / "validate_analysis_packet.py"
+FIXTURE = ROOT / "examples" / "synthetic" / "C001"
+
+
+def read_json(path: Path) -> dict[str, object]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_jsonl(path: Path) -> list[dict[str, object]]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def write_json(path: Path, value: dict[str, object]) -> None:
+    path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
 
 
 def write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
@@ -17,76 +31,14 @@ def write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 class AnalysisPacketValidationTest(unittest.TestCase):
+    """Every test mutates a private copy of the committed synthetic fixture."""
+
     def make_packet(self) -> Path:
-        root = Path(tempfile.mkdtemp(prefix="gtw-packet-test-"))
-        manifest = {
-            "schema_version": "0.1-phase-a",
-            "study_id": "SYNTHETIC",
-            "cycle_id": "C001",
-            "created_at_utc": "2026-09-02T00:00:00Z",
-            "input_manifest_sha256": "a" * 64,
-            "protocol_revision": "b" * 40,
-            "analysis_status": "WORKING",
-            "release_status": "NON_RELEASE",
-            "saturation_status": "NOT_ASSESSED",
-        }
-        (root / "MANIFEST.json").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
-        write_jsonl(
-            root / "EPISODES.jsonl",
-            [{
-                "episode_id": "E001",
-                "boundary_basis": "SOURCE_EXPLICIT",
-                "outcome_status": "ACCEPTED",
-                "source_refs": ["MNF-SYNTHETIC"],
-            }],
-        )
-        write_jsonl(
-            root / "INCIDENTS.jsonl",
-            [{
-                "incident_id": "I001",
-                "episode_id": "E001",
-                "ordinal": 1,
-                "epistemic_class": "OBSERVED_ACTION",
-                "description": "Synthetic creator repeats an input.",
-                "source_ref": {"manifestation_id": "MNF-SYNTHETIC", "locator": "event:1"},
-            }],
-        )
-        write_jsonl(
-            root / "CODES.jsonl",
-            [{
-                "code_id": "CDE001",
-                "label": "repeating an input",
-                "level": "FIRST_ORDER",
-                "status": "CURRENT",
-                "incident_ids": ["I001"],
-            }],
-        )
-        write_jsonl(
-            root / "CATEGORY_MEMOS.jsonl",
-            [{
-                "memo_id": "MEM001",
-                "category_id": "CAT001",
-                "status": "EMERGING",
-                "definition": "Synthetic category for validator testing only.",
-                "not_this": "Not a substantive research finding.",
-                "supporting_code_ids": ["CDE001"],
-                "negative_case_ids": [],
-                "rival_explanations": ["fixture construction"],
-            }],
-        )
-        write_jsonl(
-            root / "SAMPLING_REQUESTS.jsonl",
-            [{
-                "request_id": "REQ001",
-                "discriminating_question": "Does a contrasting synthetic fixture validate?",
-                "targets": ["contrast"],
-                "counter_search": "seek a non-repetition fixture",
-                "stop_rule": "one synthetic contrast",
-                "claim_ceiling": "validator behavior only",
-                "status": "PROPOSED",
-            }],
-        )
-        return root
+        root = Path(tempfile.mkdtemp(prefix="gt-packet-test-"))
+        self.addCleanup(shutil.rmtree, root, ignore_errors=True)
+        packet = root / "C001"
+        shutil.copytree(FIXTURE, packet)
+        return packet
 
     def run_validator(self, packet: Path) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -96,35 +48,37 @@ class AnalysisPacketValidationTest(unittest.TestCase):
             check=False,
         )
 
-    def test_valid_packet_passes(self) -> None:
-        result = self.run_validator(self.make_packet())
+    def assert_passes(self, packet: Path) -> None:
+        result = self.run_validator(packet)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("PASS_ANALYSIS_PACKET_STRUCTURE", result.stdout)
 
+    def assert_fails(self, packet: Path, fragment: str) -> None:
+        result = self.run_validator(packet)
+        self.assertNotEqual(result.returncode, 0, "validator accepted a packet it must reject")
+        self.assertIn(fragment, result.stderr)
+
+    def test_committed_fixture_passes(self) -> None:
+        self.assert_passes(FIXTURE)
+
+    def test_valid_copy_passes(self) -> None:
+        self.assert_passes(self.make_packet())
+
     def test_saturation_declaration_fails(self) -> None:
         packet = self.make_packet()
-        manifest = json.loads((packet / "MANIFEST.json").read_text(encoding="utf-8"))
+        manifest = read_json(packet / "MANIFEST.json")
         manifest["saturation_status"] = "SATURATED"
-        (packet / "MANIFEST.json").write_text(json.dumps(manifest) + "\n", encoding="utf-8")
-        result = self.run_validator(packet)
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("cannot declare saturation", result.stderr)
+        write_json(packet / "MANIFEST.json", manifest)
+        self.assert_fails(packet, "cannot declare saturation")
 
     def test_inference_without_basis_fails(self) -> None:
         packet = self.make_packet()
-        write_jsonl(
-            packet / "INCIDENTS.jsonl",
-            [{
-                "incident_id": "I001",
-                "episode_id": "E001",
-                "ordinal": 1,
-                "epistemic_class": "ANALYST_INFERENCE",
-                "description": "The creator believed the model was incapable.",
-            }],
-        )
-        result = self.run_validator(packet)
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("inference_basis_ids", result.stderr)
+        incidents = read_jsonl(packet / "INCIDENTS.jsonl")
+        for row in incidents:
+            if row["epistemic_class"] == "ANALYST_INFERENCE":
+                row.pop("inference_basis_ids", None)
+        write_jsonl(packet / "INCIDENTS.jsonl", incidents)
+        self.assert_fails(packet, "inference_basis_ids")
 
 
 if __name__ == "__main__":

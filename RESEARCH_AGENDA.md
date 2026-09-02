@@ -32,33 +32,13 @@ What evidence-backed methodological requirements and controls are necessary
 for an AI-assisted system to support defensible grounded-theory-oriented
 process analysis from digital traces and archival qualitative materials?
 
-### Proposed lane catalog
+### Lane catalog
 
-1. `GT-M01-L01` — grounded-theory lineages and profile choice.
-2. `GT-M01-L02` — episode/incident reconstruction from process traces.
-3. `GT-M01-L03` — initial/open/action-oriented/in-vivo and bilingual coding.
-4. `GT-M01-L04` — constant comparison and comparison records.
-5. `GT-M01-L05` — memoing, reflexivity, category properties, and versioning.
-6. `GT-M01-L06` — theoretical sampling driven by category uncertainty.
-7. `GT-M01-L07` — negative/deviant cases, rivals, and category consequences.
-8. `GT-M01-L08` — saturation, sufficiency, information power, and unknowns.
-9. `GT-M01-L09` — archival, audiovisual, and digital-trace process evidence.
-10. `GT-M01-L10` — same-creator longitudinal and technological-regime
-    comparison.
-11. `GT-M01-L11` — process theorizing, temporal bracketing, pathways, and
-    boundary conditions.
-12. `GT-M01-L12` — CAQDAS, computational, and LLM-assisted analysis validity.
-13. `GT-M01-L13` — human/AI disagreement, adjudication, drift, auditability,
-    and reproducibility.
-14. `GT-M01-L14` — Gioia/reporting forms and paper-handoff boundaries.
-15. `GT-M01-L15` — ethics, consent, privacy, rights, translation, retention,
-    and model processing.
-16. `GT-M01-L16` — the single adjudicated `GT_LITE` synthesis; no new-source
-    discovery.
-
-The executable lane fields, source-ownership rules, rival/null duties,
-dependencies, and stop laws are in
-[plans/GT-M01_LANE_CATALOG.md](plans/GT-M01_LANE_CATALOG.md).
+The sixteen lane identities `GT-M01-L01`–`GT-M01-L16` are registered once, in
+[MISSION_PORTFOLIO.md](MISSION_PORTFOLIO.md). The executable lane fields,
+source-ownership rules, rival/null duties, dependencies, and stop laws are in
+[plans/GT-M01_LANE_CATALOG.md](plans/GT-M01_LANE_CATALOG.md). This agenda does
+not restate them; a test fails if any document cites an unregistered identity.
 
 ### Deliverables
 
@@ -91,41 +71,14 @@ This is narrower than the existing Scout campaign
 deduplication, vocabulary, and open leads. `GT-M02` focuses on grounded theory,
 qualitative process analysis, and AI-assisted qualitative research machinery.
 
-### Required machinery cells
+### Machinery cells and retrieval frames
 
-- `GT-M02-C01` artifact identity, lineage, and zero-credit baseline;
-- `GT-M02-C02` episode/incident segmentation and temporal reconstruction;
-- `GT-M02-C03` initial/open/action-oriented/in-vivo coding support;
-- `GT-M02-C04` inspectable constant-comparison machinery;
-- `GT-M02-C05` memo, codebook, category, property, and version management;
-- `GT-M02-C06` theoretical-sampling, negative-case, and rival routing;
-- `GT-M02-C07` saturation/sufficiency and unresolved-route tracking;
-- `GT-M02-C08` provenance, quotes, timestamps, translations, rights/privacy;
-- `GT-M02-C09` multi-coder or human/AI disagreement and adjudication;
-- `GT-M02-C10` process-model, Gioia, proposition, and claim-evidence export;
-- `GT-M02-C11` benchmarks, synthetic fixtures, reliability, drift, and
-  documented failures; and
-- `GT-M02-C12` maintenance, interoperability, version, license, and adoption
-  seams.
-
-### Proposed lane catalog
-
-The machinery cells are assigned stable `GT-M02-C##` identities in
-[MISSION_PORTFOLIO.md](MISSION_PORTFOLIO.md). They are Scout scope cells, not
-Evidence-First worker lanes:
-
-1. Artifact identity, lineage, and zero-credit baseline deduplication.
-2. Episode/incident segmentation and temporal reconstruction.
-3. Initial, open, action-oriented, and in-vivo coding support.
-4. Inspectable constant-comparison machinery.
-5. Memo, codebook, category, property, and version management.
-6. Theoretical-sampling, negative-case, and rival routing.
-7. Saturation/sufficiency and unresolved-route tracking.
-8. Provenance, quotes, timestamps, translations, rights, and privacy.
-9. Multi-coder and human/AI review, disagreement, and adjudication.
-10. Process-model, Gioia, proposition, and claim-evidence export.
-11. Benchmarks, synthetic fixtures, reliability, drift, and failures.
-12. Maintenance, interoperability, version, license, and adoption seams.
+The twelve machinery cells `GT-M02-C01`–`GT-M02-C12` and eight retrieval
+frames `GT-M02-F01`–`GT-M02-F08` are registered once, in
+[MISSION_PORTFOLIO.md](MISSION_PORTFOLIO.md). The prospective Scout contract
+that operationalizes them is
+[plans/GT-M02_SOTA_REPOSITORY_SCOUT.md](plans/GT-M02_SOTA_REPOSITORY_SCOUT.md).
+They are Scout scope cells and search frames, not Evidence-First worker lanes.
 
 ### Canonical output and landing
 
