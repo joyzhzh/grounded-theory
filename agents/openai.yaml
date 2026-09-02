@@ -1,0 +1,4 @@
+interface:
+  display_name: "Grounded Theory"
+  short_description: "Build auditable process theory from qualitative data"
+  default_prompt: "Use $grounded-theory to orient this study, preserve epistemic levels, and prepare the next bounded grounded-theory cycle."

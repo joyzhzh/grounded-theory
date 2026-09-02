@@ -1,0 +1,13 @@
+# Decisions
+
+| Date | Decision | Reason | Authority state |
+|---|---|---|---|
+| 2026-09-02 | Name the private Phase A repository `grounded-theory` and the skill `$grounded-theory`. | The repository owns a methods research agenda as well as the reusable tool; “workbench” was too narrow. | Architecture draft |
+| 2026-09-02 | Divide the program into `GT-M01` Evidence-First methods research and `GT-M02` SOTA repository scouting. | Method claims require evidence admission; repository landscape discovery requires a different search and coverage contract. | Architecture draft |
+| 2026-09-02 | Land the future `GT-M02` result under `joyzhzh/sota-repository-scout/campaigns/<run-date>__grounded-theory-methods-tooling/`. | The canonical Scout repository owns compact campaign bundles and coverage memory. | Architecture draft; no campaign or upload authorized |
+| 2026-09-02 | Describe the initial method as an inductive process study using grounded-theory techniques until a study-specific method profile is frozen. | Avoid silently conflating grounded-theory traditions or Gioia presentation with the method itself. | Architecture draft |
+| 2026-09-02 | Treat AI learning as versioned analytical state, not hidden memory or fine-tuning. | Makes changes inspectable, reviewable, and reversible through supersession. | Architecture draft |
+| 2026-09-02 | Keep real study bytes and outputs outside Git. | Protects privacy, rights, and custody while keeping the tool reusable. | Architecture draft |
+| 2026-09-02 | Pin Evidence-First v2 at `fa6cc2e2f93136d2d7b5d29a3b5d5b3e7d445e1d` for Phase A review. | Binds the scaffold to an exact verified protocol revision without following `main`. | Architecture draft only; no fire authority |
+| 2026-09-02 | Define `GT-M01` as 15 first-ten acquisition lanes plus one non-acquisition `GT_LITE` synthesis step; define `GT-M02` as one Scout campaign with 12 cells and 8 frames. | Matches the pinned protocol's worker handoff law while keeping repository discovery separate from evidence admission. | Architecture draft; all lanes and frames unfired |
+| 2026-09-02 | Permit a later `draft-paper` mode only in a separately authorized author seat consuming immutable adjudicated inputs. | The user needs a paper-producing workflow, but drafting must not create evidence, decide admission, self-clear claims, or imply release/publication. | Architecture draft; no draft authority |

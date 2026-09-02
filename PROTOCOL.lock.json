@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "repository": "joyzhzh/evidence-first-deep-research-v2",
+  "repository_url": "https://github.com/joyzhzh/evidence-first-deep-research-v2",
+  "revision": "fa6cc2e2f93136d2d7b5d29a3b5d5b3e7d445e1d",
+  "default_branch_observed": "main",
+  "observed_on": "2026-09-02",
+  "protocol_entrypoint": "DUAL_MODEL_DEEP_RESEARCH_BOILERPLATE_V2.md",
+  "standalone_mission_template": "PROTOCOL_KIT_V2/01_EXECUTOR_COMMANDER_TEMPLATE.md",
+  "pin_intent": "exact remote snapshot selected for Phase A architecture; not an alias for current main",
+  "use": "architecture-draft-only",
+  "campaign_fire_authorized": false,
+  "vendored": false,
+  "submodule": false,
+  "update_policy": "immutable pin; re-authenticate and obtain Operator ratification before any live study"
+}

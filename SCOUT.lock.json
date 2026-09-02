@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "landing_repository": "joyzhzh/sota-repository-scout",
+  "landing_repository_url": "https://github.com/joyzhzh/sota-repository-scout",
+  "landing_revision_observed": "78153499bbc6965a064a51929cbe1a486ca2c816",
+  "default_branch_observed": "main",
+  "observed_on": "2026-09-02",
+  "planned_campaign_path": "campaigns/<run-date>__grounded-theory-methods-tooling",
+  "execution_method": "lean sota-repository-scout skill pinned within the Evidence-First protocol revision",
+  "controller_adoption_authorized": false,
+  "campaign_fire_authorized": false,
+  "result_exists": false,
+  "landing_authorized": false,
+  "note": "The observed Scout main is a supervised-beta landing repository, not a qualified execution pin. Freeze actual revisions again before fire and landing."
+}

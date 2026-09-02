@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joyzhzh/grounded-theory/schemas/analysis-packet.schema.json",
+  "title": "Grounded Theory Cycle Manifest",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "study_id",
+    "cycle_id",
+    "created_at_utc",
+    "input_manifest_sha256",
+    "protocol_revision",
+    "analysis_status",
+    "release_status",
+    "saturation_status"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1-phase-a"},
+    "study_id": {"type": "string", "minLength": 1},
+    "cycle_id": {"type": "string", "pattern": "^C[0-9]{3,}$"},
+    "created_at_utc": {"type": "string", "minLength": 1},
+    "input_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "protocol_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "analysis_status": {"enum": ["WORKING", "SUBMITTED_FOR_REVIEW"]},
+    "release_status": {"const": "NON_RELEASE"},
+    "saturation_status": {
+      "enum": [
+        "NOT_ASSESSED",
+        "NOT_REACHED",
+        "PROVISIONAL_SUFFICIENCY_CANDIDATE"
+      ]
+    }
+  }
+}
