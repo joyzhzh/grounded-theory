@@ -87,7 +87,8 @@ class AnalysisPacketValidationTest(unittest.TestCase):
         self.assertEqual(
             names,
             {"manifest.schema.json", "episode.schema.json", "incident.schema.json", "code.schema.json",
-             "category-memo.schema.json", "sampling-request.schema.json"},
+             "comparison.schema.json", "category-memo.schema.json", "memo.schema.json",
+             "sampling-request.schema.json"},
         )
         for path in (ROOT / "schemas").glob("*.schema.json"):
             with self.subTest(schema=path.name):
@@ -176,6 +177,102 @@ class AnalysisPacketValidationTest(unittest.TestCase):
         memos[0]["supporting_code_ids"] = []
         write_jsonl(packet / "CATEGORY_MEMOS.jsonl", memos)
         self.assert_fails(packet, "supporting_code_ids")
+
+    # --- 0.2-phase-a: comparisons, memos, seats, hash-bound quotes ---
+
+    def test_missing_comparisons_file_fails(self) -> None:
+        packet = self.make_packet()
+        (packet / "COMPARISONS.jsonl").unlink()
+        self.assert_fails(packet, "COMPARISONS.jsonl")
+
+    def test_emerging_category_without_comparison_fails(self) -> None:
+        packet = self.make_packet()
+        memos = read_jsonl(packet / "CATEGORY_MEMOS.jsonl")
+        memos[0]["comparison_ids"] = []
+        write_jsonl(packet / "CATEGORY_MEMOS.jsonl", memos)
+        self.assert_fails(packet, "comparison_ids")
+
+    def test_dangling_comparison_citation_fails(self) -> None:
+        packet = self.make_packet()
+        memos = read_jsonl(packet / "CATEGORY_MEMOS.jsonl")
+        memos[0]["comparison_ids"] = ["CMP999"]
+        write_jsonl(packet / "CATEGORY_MEMOS.jsonl", memos)
+        self.assert_fails(packet, "unknown comparison")
+
+    def test_focused_category_requires_rivals_and_counter_search(self) -> None:
+        packet = self.make_packet()
+        memos = read_jsonl(packet / "CATEGORY_MEMOS.jsonl")
+        memos[0]["status"] = "FOCUSED"
+        memos[0]["rival_explanations"] = []
+        write_jsonl(packet / "CATEGORY_MEMOS.jsonl", memos)
+        self.assert_fails(packet, "rival_explanations")
+        memos[0]["rival_explanations"] = ["fixture construction"]
+        memos[0].pop("counter_search")
+        write_jsonl(packet / "CATEGORY_MEMOS.jsonl", memos)
+        self.assert_fails(packet, "counter_search")
+        memos[0]["counter_search"] = "sought an invented violating incident"
+        write_jsonl(packet / "CATEGORY_MEMOS.jsonl", memos)
+        self.assert_passes(packet)
+
+    def test_comparison_needs_two_known_identities(self) -> None:
+        packet = self.make_packet()
+        comparisons = read_jsonl(packet / "COMPARISONS.jsonl")
+        comparisons[0]["compared_ids"] = ["I001"]
+        write_jsonl(packet / "COMPARISONS.jsonl", comparisons)
+        self.assert_fails(packet, "compared_ids")
+        comparisons[0]["compared_ids"] = ["I001", "CAT999"]
+        write_jsonl(packet / "COMPARISONS.jsonl", comparisons)
+        self.assert_fails(packet, "compared_ids")
+
+    def test_same_seat_cannot_produce_and_review(self) -> None:
+        packet = self.make_packet()
+        manifest = read_json(packet / "MANIFEST.json")
+        manifest["reviewer_seat"] = manifest["producer_seat"]
+        write_json(packet / "MANIFEST.json", manifest)
+        self.assert_fails(packet, "reviewer_seat")
+
+    def test_manifest_requires_tool_and_model_identity(self) -> None:
+        for field in ("tool_revision", "model_processing", "producer_seat"):
+            with self.subTest(field=field):
+                packet = self.make_packet()
+                manifest = read_json(packet / "MANIFEST.json")
+                manifest.pop(field)
+                write_json(packet / "MANIFEST.json", manifest)
+                self.assert_fails(packet, field)
+
+    def test_quote_ref_must_bind_the_incident_manifestation(self) -> None:
+        packet = self.make_packet()
+        incidents = read_jsonl(packet / "INCIDENTS.jsonl")
+        for row in incidents:
+            if row["epistemic_class"] == "CREATOR_STATED_INTERPRETATION":
+                row["quote_ref"]["manifestation_id"] = "MNF-SYNTHETIC-002"
+        write_jsonl(packet / "INCIDENTS.jsonl", incidents)
+        self.assert_fails(packet, "quote_ref")
+
+    def test_free_text_quote_ref_fails(self) -> None:
+        packet = self.make_packet()
+        incidents = read_jsonl(packet / "INCIDENTS.jsonl")
+        for row in incidents:
+            if row["epistemic_class"] == "CREATOR_STATED_INTERPRETATION":
+                row["quote_ref"] = "trust me"
+        write_jsonl(packet / "INCIDENTS.jsonl", incidents)
+        self.assert_fails(packet, "quote_ref")
+
+    def test_theoretical_memo_without_refs_fails(self) -> None:
+        packet = self.make_packet()
+        memos = read_jsonl(packet / "MEMOS.jsonl")
+        for row in memos:
+            if row["memo_type"] == "THEORETICAL":
+                row["refs"] = []
+        write_jsonl(packet / "MEMOS.jsonl", memos)
+        self.assert_fails(packet, "refs")
+
+    def test_dangling_memo_ref_fails(self) -> None:
+        packet = self.make_packet()
+        memos = read_jsonl(packet / "MEMOS.jsonl")
+        memos[0]["refs"] = ["CMP999"]
+        write_jsonl(packet / "MEMOS.jsonl", memos)
+        self.assert_fails(packet, "unknown identity")
 
     def test_manifestation_identity_must_be_mnf_prefixed(self) -> None:
         packet = self.make_packet()

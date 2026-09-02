@@ -1,4 +1,4 @@
-# Analysis packet contract — schema 0.1 Phase A
+# Analysis packet contract — schema 0.2-phase-a
 
 Each analytical cycle is a new directory. Historical cycles are immutable.
 
@@ -8,82 +8,104 @@ C001/
   EPISODES.jsonl
   INCIDENTS.jsonl
   CODES.jsonl
+  COMPARISONS.jsonl
   CATEGORY_MEMOS.jsonl
+  MEMOS.jsonl
   SAMPLING_REQUESTS.jsonl
 ```
 
+Row shapes are defined once, in `schemas/*.schema.json`, one schema per file,
+and the validator applies them with `jsonschema`. This page states what each
+file is for and the cross-file rules the validator adds.
+
+## Identities
+
+Formats are fixed: `E###` episodes, `I###` incidents, `CDE###` codes,
+`CMP###` comparisons, `CAT###` categories, `MEM###` category memos,
+`MEMO###` analytical memos, `REQ###` sampling requests, and `MNF-…`
+manifestations minted by the study vault. Timestamps are ISO-8601 UTC with a
+`Z` suffix. Hashes are lowercase SHA-256.
+
 ## Manifest
 
-Required fields:
-
-- `schema_version`: `0.1-phase-a`
-- `study_id`, `cycle_id`, and `created_at_utc`
-- `input_manifest_sha256`: lowercase SHA-256 of the frozen input manifest
-- `protocol_revision`: exact 40-character commit
-- `analysis_status`: `WORKING` or `SUBMITTED_FOR_REVIEW`
-- `release_status`: always `NON_RELEASE` for an analysis cycle
-- `saturation_status`: `NOT_ASSESSED`, `NOT_REACHED`, or
-  `PROVISIONAL_SUFFICIENCY_CANDIDATE`
+`schema_version` is `0.2-phase-a`. The manifest binds the frozen input
+manifest hash, the exact protocol revision, the exact `tool_revision` of this
+repository, the `producer_seat`, a `reviewer_seat` that must differ, and
+`model_processing` naming the processing-authority decision and the exact
+models used (an empty list means no model processed study data).
+`analysis_status` is `WORKING` or `SUBMITTED_FOR_REVIEW`; `release_status` is
+always `NON_RELEASE`; `saturation_status` is `NOT_ASSESSED`, `NOT_REACHED`,
+or `PROVISIONAL_SUFFICIENCY_CANDIDATE`, never a saturation claim.
 
 ## Episodes
 
-Each row has a unique `episode_id`, `boundary_basis`, `outcome_status`, and
-nonempty `source_refs`. Allowed boundary bases are `SOURCE_EXPLICIT`,
-`ANALYST_RECONSTRUCTED`, and `UNCERTAIN`. Unknown endings remain `UNKNOWN`.
+Each row has `boundary_basis` (`SOURCE_EXPLICIT`, `ANALYST_RECONSTRUCTED`,
+`UNCERTAIN`), `outcome_status` (`ACCEPTED`, `TRANSFORMED`, `SUBSTITUTED`,
+`DECOMPOSED`, `POSTPONED`, `ABANDONED`, `UNKNOWN`), and nonempty
+`source_refs` of manifestation identities.
 
 ## Incidents
 
-Each row has `incident_id`, `episode_id`, positive integer `ordinal`, exactly
-one `epistemic_class`, and `description`.
+Each row has `episode_id`, a positive `ordinal` unique within its episode,
+exactly one `epistemic_class`, and `description`.
 
-- Source-based classes require `source_ref` with manifestation identity and
-  exact locator.
-- `CREATOR_STATED_INTERPRETATION` also requires `quote_ref`.
-- `ANALYST_INFERENCE` requires nonempty `inference_basis_ids`.
-- `THEORETICAL_CONSTRUCT` requires nonempty `construct_basis_ids` and normally
-  belongs in category/memo records rather than raw incidents.
+- Source-based classes require `source_ref` with a manifestation among the
+  episode's `source_refs` and an exact locator.
+- `CREATOR_STATED_INTERPRETATION` also requires `quote_ref`: the same
+  manifestation, a locator, and the SHA-256 of the exact retained wording.
+  Free text is not a quotation binding.
+- `ANALYST_INFERENCE` requires `inference_basis_ids`; `THEORETICAL_CONSTRUCT`
+  requires `construct_basis_ids`. Both cite existing incidents or codes and
+  never the incident itself.
 
 ## Codes
 
-Each row has `code_id`, `label`, `level`, `status`, and nonempty
-`incident_ids`. Phase A permits `FIRST_ORDER` and `IN_VIVO`; statuses are
-`CURRENT`, `SUPERSEDED`, and `RETIRED`.
+Each row has `label`, `level` (`FIRST_ORDER` or `IN_VIVO`), `status`
+(`CURRENT`, `SUPERSEDED`, `RETIRED`), and nonempty `incident_ids`.
+
+## Comparisons
+
+Constant comparison is recorded, not asserted. Each row names at least two
+compared identities (incidents, episodes, codes, or categories), a `relation`
+(`SIMILARITY`, `DIFFERENCE`, `CONDITION`, `CONSEQUENCE`), the `observation`,
+a `possible_condition` and `rival_explanation` (explicit `null` when none was
+identified), and the `discriminating_evidence` that would settle it.
 
 ## Category memos
 
-Each row has `memo_id`, `category_id`, `status`, `definition`, `not_this`,
-`supporting_code_ids`, `negative_case_ids`, and `rival_explanations`.
-`EMERGING` and `FOCUSED` categories require support. A category without support
-must remain `SENSITIZING_ONLY`.
+Each row has `category_id`, `status`, `definition`, `not_this`,
+`supporting_code_ids`, `comparison_ids`, `negative_case_ids`,
+`rival_explanations`, and optionally `counter_search`.
+
+- `SENSITIZING_ONLY` needs no support. Interesting language is not support.
+- `EMERGING` and `FOCUSED` require at least one supporting code and at least
+  one recorded comparison.
+- `FOCUSED` additionally requires at least one rival explanation and a
+  `counter_search` stating what was sought that should violate the category.
+  A negative case need not exist yet; the search for one must be recorded.
+
+## Memos
+
+Descriptive, comparison, methodological, and theoretical memos are separate
+record types (`memo_type`) in one file. A memo has `refs` to existing
+identities and a `body`; comparison and theoretical memos must cite at least
+one identity. A memo is an argument, never evidence.
 
 ## Sampling requests
 
-Each row has `request_id`, `discriminating_question`, nonempty `targets`,
-`counter_search`, `stop_rule`, `claim_ceiling`, and status `PROPOSED`,
-`AUTHORIZED`, `RETURNED`, or `CLOSED`. The tool may propose; only the
-appropriate authority may authorize collection.
+Each row has `discriminating_question`, nonempty `targets`, `counter_search`,
+`stop_rule`, `claim_ceiling`, and `status`. The tool writes only `PROPOSED`;
+`AUTHORIZED`, `RETURNED`, and `CLOSED` require an `authority_ref` naming the
+decision that changed the status.
 
-## Row schemas and cross-file rules
+## Cross-file rules
 
-Row shapes are defined once, in `schemas/*.schema.json` (one schema per
-packet file), and the validator applies them with `jsonschema`. Identity
-formats are fixed: `E###` episodes, `I###` incidents, `CDE###` codes,
-`MEM###` memos, `CAT###` categories, `REQ###` requests, and `MNF-…`
-manifestations minted by the study vault. Timestamps are ISO-8601 UTC with a
-`Z` suffix.
-
-The validator adds only what a per-row schema cannot express:
-
-- identities are unique within their file;
-- every cited incident, code, episode, or negative case exists in the packet,
-  and a basis list never cites its own incident;
-- ordinals are unique within an episode;
-- an incident's source manifestation is among its episode's `source_refs`;
-- supersession is explicit: a successor row carries `supersedes` and
+- Identities are unique within their file.
+- Every cited identity exists in the packet.
+- Supersession is explicit: a successor carries `supersedes` and
   `supersession_reason`, a `RETIRED` row carries `retirement_reason`, and a
-  row marked `SUPERSEDED` inside a packet has its successor in that packet;
-- a sampling request with status `AUTHORIZED`, `RETURNED`, or `CLOSED`
-  names its `authority_ref`; the tool itself may only write `PROPOSED`.
+  row marked `SUPERSEDED` inside a packet has its successor in that packet.
+- The producing seat cannot be the reviewing seat.
 
 ## Validator ceiling
 

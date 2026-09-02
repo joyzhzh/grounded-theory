@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the Phase A structure of a grounded-theory analysis cycle.
+"""Validate the Phase A structure of a grounded-theory analysis cycle (schema 0.2-phase-a).
 
 Row shapes are defined once, in ``schemas/*.schema.json``, and applied here
 with ``jsonschema``. This script adds only the cross-file rules a per-row
@@ -33,7 +33,9 @@ PACKET_FILES = (
     ("EPISODES.jsonl", "episode", "episode_id"),
     ("INCIDENTS.jsonl", "incident", "incident_id"),
     ("CODES.jsonl", "code", "code_id"),
+    ("COMPARISONS.jsonl", "comparison", "comparison_id"),
     ("CATEGORY_MEMOS.jsonl", "category-memo", "memo_id"),
+    ("MEMOS.jsonl", "memo", "memo_id"),
     ("SAMPLING_REQUESTS.jsonl", "sampling-request", "request_id"),
 )
 
@@ -151,24 +153,35 @@ def validate_packet(root: Path) -> None:
         if errors[0].startswith("saturation_status"):
             raise PacketError(f"MANIFEST.json: saturation_status cannot declare saturation ({errors[0]})")
         raise PacketError(f"MANIFEST.json: {errors[0]}")
+    require(
+        manifest["producer_seat"] != manifest["reviewer_seat"],
+        "MANIFEST.json: reviewer_seat must differ from producer_seat; the producing seat cannot review its own cycle",
+    )
 
     episodes = read_jsonl(root / "EPISODES.jsonl")
     incidents = read_jsonl(root / "INCIDENTS.jsonl")
     codes = read_jsonl(root / "CODES.jsonl")
+    comparisons = read_jsonl(root / "COMPARISONS.jsonl")
     category_memos = read_jsonl(root / "CATEGORY_MEMOS.jsonl")
+    memos = read_jsonl(root / "MEMOS.jsonl")
     sampling = read_jsonl(root / "SAMPLING_REQUESTS.jsonl")
 
     apply_schema("EPISODES.jsonl", validators["episode"], episodes)
     apply_schema("INCIDENTS.jsonl", validators["incident"], incidents)
     apply_schema("CODES.jsonl", validators["code"], codes)
+    apply_schema("COMPARISONS.jsonl", validators["comparison"], comparisons)
     apply_schema("CATEGORY_MEMOS.jsonl", validators["category-memo"], category_memos)
+    apply_schema("MEMOS.jsonl", validators["memo"], memos)
     apply_schema("SAMPLING_REQUESTS.jsonl", validators["sampling-request"], sampling)
 
     episodes_by_id = unique_ids("EPISODES.jsonl", episodes, "episode_id")
     incidents_by_id = unique_ids("INCIDENTS.jsonl", incidents, "incident_id")
     codes_by_id = unique_ids("CODES.jsonl", codes, "code_id")
-    unique_ids("CATEGORY_MEMOS.jsonl", category_memos, "memo_id")
-    unique_ids("SAMPLING_REQUESTS.jsonl", sampling, "request_id")
+    comparisons_by_id = unique_ids("COMPARISONS.jsonl", comparisons, "comparison_id")
+    category_memos_by_id = unique_ids("CATEGORY_MEMOS.jsonl", category_memos, "memo_id")
+    memos_by_id = unique_ids("MEMOS.jsonl", memos, "memo_id")
+    requests_by_id = unique_ids("SAMPLING_REQUESTS.jsonl", sampling, "request_id")
+    category_ids = {row["category_id"] for row in category_memos}
 
     basis_ids = set(incidents_by_id) | set(codes_by_id)
     ordinals: dict[str, set[int]] = {}
@@ -185,6 +198,13 @@ def validate_packet(root: Path) -> None:
                 source_ref["manifestation_id"] in episode["source_refs"],
                 f"{loc}: source_ref manifestation {source_ref['manifestation_id']} is not among episode {row['episode_id']} source_refs",
             )
+        quote_ref = row.get("quote_ref")
+        if quote_ref is not None:
+            require(source_ref is not None, f"{loc}: quote_ref requires source_ref")
+            require(
+                quote_ref["manifestation_id"] == source_ref["manifestation_id"],
+                f"{loc}: quote_ref manifestation {quote_ref['manifestation_id']} differs from source_ref manifestation",
+            )
         for field in ("inference_basis_ids", "construct_basis_ids"):
             for basis in row.get(field, []):
                 require(basis != row["incident_id"], f"{loc}: {field} cannot cite the incident itself")
@@ -196,14 +216,30 @@ def validate_packet(root: Path) -> None:
             require(incident_id in incidents_by_id, f"{loc}: unknown incident_id {incident_id}")
     check_lifecycle("CODES.jsonl", codes, "code_id")
 
+    comparable_ids = set(incidents_by_id) | set(episodes_by_id) | set(codes_by_id) | category_ids
+    for row in comparisons:
+        loc = where("COMPARISONS.jsonl", row)
+        for compared in row["compared_ids"]:
+            require(compared in comparable_ids, f"{loc}: compared_ids cites unknown incident, episode, code, or category {compared}")
+    check_lifecycle("COMPARISONS.jsonl", comparisons, "comparison_id")
+
     case_ids = set(incidents_by_id) | set(episodes_by_id)
     for row in category_memos:
         loc = where("CATEGORY_MEMOS.jsonl", row)
         for code_id in row["supporting_code_ids"]:
             require(code_id in codes_by_id, f"{loc}: unknown supporting code {code_id}")
+        for comparison_id in row["comparison_ids"]:
+            require(comparison_id in comparisons_by_id, f"{loc}: comparison_ids cites unknown comparison {comparison_id}")
         for case_id in row["negative_case_ids"]:
             require(case_id in case_ids, f"{loc}: negative_case_ids cites unknown incident or episode {case_id}")
     check_lifecycle("CATEGORY_MEMOS.jsonl", category_memos, "memo_id")
+
+    referable_ids = comparable_ids | set(comparisons_by_id) | set(category_memos_by_id) | set(requests_by_id)
+    for row in memos:
+        loc = where("MEMOS.jsonl", row)
+        for ref in row["refs"]:
+            require(ref in referable_ids, f"{loc}: refs cites unknown identity {ref}")
+    check_lifecycle("MEMOS.jsonl", memos, "memo_id")
 
 
 def main() -> int:

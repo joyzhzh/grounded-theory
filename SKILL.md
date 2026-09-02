@@ -62,12 +62,15 @@ unknown. Never interpret unknown as permission.
 3. Assign exactly one epistemic class to every incident.
 4. Produce action-oriented or source-native initial codes close to the data.
 5. Compare incidents, codes, episodes, creators, periods, outcomes, and
-   contrary pathways.
+   contrary pathways, and append each comparison as a `COMPARISONS.jsonl`
+   record naming what was compared, the relation, rivals, and what would
+   discriminate.
 6. Write descriptive, comparison, methodological, and theoretical memos as
-   separate record types.
+   separate record types in `MEMOS.jsonl`.
 7. Develop or revise categories only after recurring comparisons. Record the
    definition, exclusions, properties, conditions, consequences, rivals,
-   supporting codes, and negative cases.
+   supporting codes, the comparisons relied on, the counter-search performed,
+   and negative cases.
 8. Generate sampling requests that discriminate among explanations rather
    than merely seek more examples.
 9. Validate the packet structurally with:
