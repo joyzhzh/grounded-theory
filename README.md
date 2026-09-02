@@ -53,7 +53,7 @@ cases, and sampling requests.
 
 ## Repository boundary
 
-Private traces, source manifestations, transcripts, personal data, live study
+Trace datasets, source manifestations, transcripts, personal data, live study
 outputs, and claim-bearing evidence stay outside Git in a private study vault
 resolved by an ignored `.vault-root`. This repository contains only the
 reusable method, schemas, templates, synthetic examples, validators, and tests.

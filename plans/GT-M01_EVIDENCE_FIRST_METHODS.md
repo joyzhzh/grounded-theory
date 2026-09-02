@@ -1,6 +1,6 @@
 # GT-M01 plan — Evidence-First grounded-theory methods
 
-**State:** proposed; unfired
+**State:** proposed; deferred by `START_HERE__20260902.md` Order C
 **Protocol:** `joyzhzh/evidence-first-deep-research-v2@fa6cc2e2f93136d2d7b5d29a3b5d5b3e7d445e1d`
 **Authority:** no research, source acquisition, or dispatch authority issued
 

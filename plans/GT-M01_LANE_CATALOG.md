@@ -1,6 +1,6 @@
 # GT-M01 lane catalog — Evidence-First grounded-theory methods
 
-**State:** proposed; unfired; not a launch instrument
+**State:** proposed; deferred by `START_HERE__20260902.md` Order C; not a launch instrument
 **Mission:** `GT-M01`
 **Catalog size:** 15 evidence-acquisition worker lanes plus one mission-level
 synthesis step

@@ -42,7 +42,7 @@ rulings are in [START_HERE__20260902.md](START_HERE__20260902.md) and
 2. Freeze the study's declared methodological profile and permitted reporting
    language.
 3. Freeze the research question, unit of analysis, and episode-boundary rule.
-4. Approve the exact private trace dataset and archival-evidence package.
+4. Approve the exact pilot trace dataset and archival-evidence package.
 5. Rule consent, privacy, retention, redaction, and cloud-model processing.
 6. Authenticate and ratify the protocol and Scout method pins and seat routing.
 7. Approve a bounded methods campaign, Scout campaign, or pilot cycle and its

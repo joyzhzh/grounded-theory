@@ -2,6 +2,7 @@
 
 **Date:** 2026-09-02
 **Decision state:** architecture draft; superseded for authority by `START_HERE__20260902.md` (fire orders issued 2026-09-02)
+**Provenance correction, 2026-09-02:** the pilot dataset is open-sourced third-party production-trace data, not the Operator's own traces; rulings 4 and 5 in the START memo govern its use
 **Repository:** `joyzhzh/grounded-theory`
 **First intended study:** creative realization through probabilistic AIGC
 
@@ -15,9 +16,10 @@ category change, memo, theoretical-sampling request, and paper handoff.
 
 Before that use, the program should run two separate research missions: an
 Evidence-First methods mission and a grounded-theory-specific SOTA repository
-Scout. The first use of the resulting tool should then be the user's detailed
-Seedance-era generation traces,
-combined later with separately governed public archival evidence. The tool
+Scout. The first use of the tool is the open-sourced Seedance feature-film
+production-trace dataset the Operator holds, a group of creators' detailed
+per-attempt traces, combined later with separately governed public archival
+evidence. The tool
 must remain reusable beyond AIGC.
 
 ## Method position
@@ -180,7 +182,7 @@ saturation.
 | Starter prompt reproduces the proposed theory | keep sensitizing concepts in a separate artifact and out of initial coding |
 | Behavioral trace becomes a claim about cognition | exact epistemic class; interpretation needs creator-stated evidence |
 | LLM themes masquerade as grounded theory | incident-level codes, comparison records, category-change logs, and sampling consequences |
-| Private traces leak through Git or cloud inference | ignored external vault and a required processing-authority gate |
+| Trace data leaks through Git or cloud inference | ignored external vault and a required processing-authority gate |
 | Categories stabilize because challenges stop | mandatory counter-search and negative-case review |
 | Repetitive search is called saturation | candidate-only stop language plus unresolved-route register |
 | Control machinery overwhelms analysis | one cycle history, small schemas, deterministic validation, no second ledger or receipt recursion |
