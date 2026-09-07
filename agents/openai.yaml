@@ -1,4 +1,4 @@
 interface:
   display_name: "Grounded Theory"
-  short_description: "Build auditable process theory from qualitative data"
+  short_description: "Source-linked qualitative analysis and comparison"
   default_prompt: "Use $grounded-theory to orient this study, preserve epistemic levels, and prepare the next bounded grounded-theory cycle."

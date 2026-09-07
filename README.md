@@ -1,111 +1,125 @@
 # Grounded Theory
 
-A private Evidence-First research program and Codex skill for learning,
-designing, and applying grounded-theory-oriented analysis. It combines a
-methods research agenda with an auditable tool for episode reconstruction,
-initial coding, constant comparison, memoing, theoretical sampling,
-negative-case analysis, and provenance-bound paper drafting and handoff.
+[![Tests](https://github.com/joyzhzh/grounded-theory/actions/workflows/test.yml/badge.svg)](https://github.com/joyzhzh/grounded-theory/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Current state
+A Codex skill for qualitative analysis you can inspect: reconstruct episodes,
+code exact source passages, compare incidents, revise categories after
+counterexamples, and prepare a local handoff for review.
 
-- **Repository state:** `FIRE ORDERS ISSUED 2026-09-02 — NOT EXECUTED` (see [START_HERE__20260902.md](START_HERE__20260902.md))
-- **Research missions:** 2; fire orders issued for `GT-M02` and the exploratory pilot `GT-PILOT-C001`; nothing executed
-- **Skill state:** structural prototype; no live study has run
-- **Real data ingested:** none
-- **Categories or theory produced:** none
-- **Saturation assessed:** no
-- **Paper or publication authorized:** no
-- **Protocol pin:** `joyzhzh/evidence-first-deep-research-v2@fa6cc2e2f93136d2d7b5d29a3b5d5b3e7d445e1d`
+**Status: `USABLE_V1`.** The workflow has passed software checks and an
+end-to-end fresh-session test on a wholly invented fixture. Human review of
+interpretations remains necessary. See [status and limits](STATUS.md).
 
-Creating this repository does not activate a study. See [STATUS.md](STATUS.md)
-and the [Phase A memo](PHASE_A_MEMO.md).
+## What you get
 
-## What this is
+- Episodes with explicit attempt relationships and preserved unknown endings.
+- Source-linked incidents and action-oriented codes, with separate observation,
+  attributed interpretation and analyst inference.
+- Comparisons that explain what changes in the analysis, including negative cases.
+- Descriptive, comparison, methodological and theoretical memos; earlier category
+  and memo versions remain intact.
+- A discriminating sampling proposal that stays unexecuted, plus a checked local
+  handoff with source hashes and exact locators.
 
-The tool component follows the shape of
-`joyzhzh/eisenhardt-case-study`: one installable skill, explicit modes and hard
-boundaries, small deterministic validation code, synthetic tests, and no live
-research corpus in the reusable tool repository.
+The agent interprets the input. Small Python helpers prepare, append, continue,
+validate and seal analysis cycles. The helpers make no model or network calls.
+Use the methodological label **inductive process study using grounded-theory
+techniques**; software validation does not establish a theory's validity.
 
-It applies the custody principles of Evidence-First Deep Research: preserved
-source identity, exact locators, explicit epistemic levels, append-only
-correction, independent review, and a clean separation among discovery,
-analysis, evidence admission, drafting, release, and publication.
+## Install
 
-The initial use case is AIGC creation under probabilistic generation, but the
-tool is phenomenon-neutral. The focal AIGC question is:
-
-> What happens when creators attempt to realize creative intentions through
-> probabilistic generative technologies?
-
-## What this is not
-
-- It is not a one-pass theme generator.
-- It does not infer cognition from behavior.
-- It does not treat an LLM's prior knowledge as empirical evidence.
-- It does not fine-tune or secretly update a model.
-- It does not autonomously declare theoretical saturation.
-- It does not admit evidence, clear a paper, or authorize publication.
-
-Here, “AI learning” means accumulating versioned, inspectable analytical state
-across cycles: incidents, codes, comparisons, category changes, memos, negative
-cases, and sampling requests.
-
-## Repository boundary
-
-Trace datasets, source manifestations, transcripts, personal data, live study
-outputs, and claim-bearing evidence stay outside Git in a private study vault
-resolved by an ignored `.vault-root`. This repository contains only the
-reusable method, schemas, templates, synthetic examples, validators, and tests.
-
-## Install and invoke
-
-During Phase A, clone the private repository into the Codex skills directory
-only for controlled testing:
+Requires Codex with local skill support, Git, and Python 3.9+ with `jsonschema`.
+The helpers run on macOS, Linux or WSL; they use POSIX file locking.
+Use a Python environment that permits installing dependencies.
 
 ```bash
+mkdir -p ~/.codex/skills
 git clone https://github.com/joyzhzh/grounded-theory.git \
   ~/.codex/skills/grounded-theory
+python3 -m pip install -r ~/.codex/skills/grounded-theory/requirements.txt
 ```
 
-Then invoke:
+If the target already contains an installation, preserve it and update that
+checkout instead of cloning over it. Keep the Git checkout: the helpers record
+its revision and a hash of the actual runtime files.
+
+## Try the skill
+
+In a fresh Codex task, paste:
 
 ```text
-Use $grounded-theory to orient this study and prepare a method charter. Do not ingest data yet.
+Use $grounded-theory and the reusable prompt in its AGENT_STARTER.md.
+
+Study question: How does a designer decide what to change when generated illustrations do not match a brief?
+Input path: examples/synthetic/cloud_post.txt in the installed skill directory.
+Output study path: a new grounded-theory-demo directory in my home folder, outside every Git checkout; use an unused suffix if needed.
+
+The named fixture is wholly invented and authorized for this local synthetic
+exercise. Copy its exact bytes into the study, preserve the original, and keep
+all results SYNTHETIC / INVENTED / NON_RELEASE. Analyze the fixture yourself;
+do not run a prewritten example analysis. Complete the readable report and
+checked local handoff.
 ```
 
-Read [SKILL.md](SKILL.md) for modes and
-[references/grounded-theory-contract.md](references/grounded-theory-contract.md)
-for the method contract.
+For your own data, use the [starter prompt](AGENT_STARTER.md) with your question,
+exact authorized normalized-text inputs, and a new study directory. The agent
+handles file formats and checks. Raw audiovisual inputs need a separately
+authorized, traceable text/event export. No data-processing authority follows
+from installing the skill or from historical project instructions.
 
-The two proposed research missions and their explicit lane identities are in
-[MISSION_PORTFOLIO.md](MISSION_PORTFOLIO.md); their questions, deliverables,
-and claim ceilings are developed in [RESEARCH_AGENDA.md](RESEARCH_AGENDA.md).
-The SOTA map is designed to land under
-`joyzhzh/sota-repository-scout/campaigns`; it remains discovery input and never
-substitutes for the Evidence-First methods mission.
+## Use the helpers directly
 
-## Structural validation
+The [workflow guide](references/workflow.md) documents input configuration,
+supported commands, source and quote locators, supersession, and handoffs.
+For a deterministic software demonstration with invented data and no model:
 
-The Phase A validator checks a cycle packet's required files, statuses,
-epistemic classes, IDs, and references. It does not judge substantive coding
-quality or theory.
+```bash
+cd ~/.codex/skills/grounded-theory
+python3 -B examples/synthetic/workflow.py \
+  --output "$HOME/grounded-theory-scripted-demo"
+```
+
+The output path must be unused and outside every Git checkout. This example
+creates two sealed cycles, including a category revision after counterevidence.
+It is separate from using the agent to analyze the text fixture.
 
 ```bash
 python3 -m unittest discover -s tests -v
 python3 scripts/validate_analysis_packet.py examples/synthetic/C001
-./scripts/doctor.sh
 ```
 
-The validator applies the row schemas in `schemas/` and therefore needs the
-`jsonschema` package (`python3 -m pip install jsonschema`).
-`examples/synthetic/C001` is the invented fixture the tests copy. The doctor
-script checks only that `.vault-root` resolves to an absolute, untracked path
-outside this repository with no `.git` inside it. A repository-boundary test
-fails if any media, capture, or oversized file is ever tracked.
+An optional machine-local `.vault-root` can point to a private study parent;
+see [.vault-root.example](.vault-root.example) and `scripts/doctor.sh`. Helpers
+always require an explicit study path and never inspect all studies implicitly.
+
+## Data and review boundaries
+
+Only reusable code, original documentation, schemas, templates and invented
+fixtures belong in this repository. Real source bytes, transcripts, personal
+data, media and study outputs stay outside Git. See [data policy](DATA_POLICY.md).
+
+Preserve uncertainty and exact source links. Behavior alone does not establish
+belief; a missing ending remains unknown. Sampling is proposed, never acquired
+by the helper. A producer cannot provide independent review of its own analysis.
+The tool does not certify saturation, admit evidence or authorize publication.
+Analysis outputs remain `NON_RELEASE`; the public software release does not
+change their status.
+
+## Documentation
+
+- [Skill modes](SKILL.md) and [analysis contract](references/grounded-theory-contract.md).
+- [Packet contract](references/analysis-packet-contract.md) and [method limitations](references/methods-basis.md).
+- [Development decisions](DECISIONS.md) and [current status](STATUS.md).
+- [Historical project instructions](START_HERE__20260902.md), [mission portfolio](MISSION_PORTFOLIO.md)
+  and [research agenda](RESEARCH_AGENDA.md). These preserve development context;
+  their project-specific launch orders do not apply to a new user's study.
+
+The runtime is self-contained. Linked companion repositories and external
+development records are provenance context, not installation dependencies.
 
 ## License
 
-The reusable software and original tool documentation are MIT-licensed. That
-license does not apply to study data, third-party material, transcripts,
-quotes, or research outputs.
+[MIT](LICENSE) for the reusable software, original tool documentation and
+explicitly invented examples. It does not license real study data,
+third-party source material or research outputs.

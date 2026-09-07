@@ -52,6 +52,7 @@ def require(condition: bool, message: str) -> None:
 
 
 def load_schema(name: str) -> Any:
+    require(jsonschema is not None, "jsonschema is required; choose an interpreter with the existing validator dependency")
     path = SCHEMA_DIR / f"{name}.schema.json"
     schema = json.loads(path.read_text(encoding="utf-8"))
     jsonschema.Draft202012Validator.check_schema(schema)
@@ -116,31 +117,29 @@ def unique_ids(filename: str, rows: list[Row], field: str) -> dict[str, Row]:
     return by_id
 
 
+def current_rows(rows: list[Row], field: str) -> list[Row]:
+    """Successors determine current state without editing historical status fields."""
+    replaced = {r.get("supersedes") for r in rows}
+    return [r for r in rows if r[field] not in replaced and r.get("status") not in {"RETIRED", "SUPERSEDED"}]
+
+
 def check_lifecycle(filename: str, rows: list[Row], field: str) -> None:
-    """Supersession is explicit: a successor names its predecessor, and any row
-    marked SUPERSEDED inside a packet must have that successor in the packet."""
-    by_id = {row[field]: row for row in rows}
-    superseded_by: dict[str, str] = {}
+    seen: set[str] = set()
+    replaced: set[str] = set()
     for row in rows:
         target = row.get("supersedes")
-        if target is None:
-            continue
-        require(target != row[field], f"{where(filename, row)}: row cannot supersede itself")
-        if target in by_id:
-            require(
-                by_id[target].get("status") in {"SUPERSEDED", "RETIRED"},
-                f"{where(filename, row)}: supersedes {target}, whose status is not SUPERSEDED or RETIRED",
-            )
-        superseded_by[target] = row[field]
+        if target is not None:
+            require(target in seen, f"{where(filename, row)}: supersedes must name an earlier row in this packet")
+            require(target not in replaced, f"{where(filename, row)}: predecessor already has a successor")
+            require(bool(row.get("supersession_reason", "").strip()), f"{where(filename, row)}: supersession_reason required")
+            replaced.add(target)
+        seen.add(row[field])
     for row in rows:
         if row.get("status") == "SUPERSEDED":
-            require(
-                row[field] in superseded_by,
-                f"{where(filename, row)}: SUPERSEDED row has no successor in the packet; append the successor or keep the row CURRENT",
-            )
+            require(row[field] in replaced, f"{where(filename, row)}: SUPERSEDED row has no successor in the packet")
 
 
-def validate_packet(root: Path) -> None:
+def validate_packet(root: Path, additions: dict[str, list[Row]] | None = None) -> None:
     require(root.is_dir(), f"packet root is not a directory: {root}")
     for filename, _, _ in PACKET_FILES:
         require((root / filename).is_file(), f"missing required file: {filename}")
@@ -158,13 +157,17 @@ def validate_packet(root: Path) -> None:
         "MANIFEST.json: reviewer_seat must differ from producer_seat; the producing seat cannot review its own cycle",
     )
 
-    episodes = read_jsonl(root / "EPISODES.jsonl")
-    incidents = read_jsonl(root / "INCIDENTS.jsonl")
-    codes = read_jsonl(root / "CODES.jsonl")
-    comparisons = read_jsonl(root / "COMPARISONS.jsonl")
-    category_memos = read_jsonl(root / "CATEGORY_MEMOS.jsonl")
-    memos = read_jsonl(root / "MEMOS.jsonl")
-    sampling = read_jsonl(root / "SAMPLING_REQUESTS.jsonl")
+    def rows(filename: str) -> list[Row]:
+        existing = read_jsonl(root / filename)
+        return existing + (additions or {}).get(filename, [])
+
+    episodes = rows("EPISODES.jsonl")
+    incidents = rows("INCIDENTS.jsonl")
+    codes = rows("CODES.jsonl")
+    comparisons = rows("COMPARISONS.jsonl")
+    category_memos = rows("CATEGORY_MEMOS.jsonl")
+    memos = rows("MEMOS.jsonl")
+    sampling = rows("SAMPLING_REQUESTS.jsonl")
 
     apply_schema("EPISODES.jsonl", validators["episode"], episodes)
     apply_schema("INCIDENTS.jsonl", validators["incident"], incidents)
@@ -184,14 +187,18 @@ def validate_packet(root: Path) -> None:
     category_ids = {row["category_id"] for row in category_memos}
 
     basis_ids = set(incidents_by_id) | set(codes_by_id)
+    check_lifecycle("EPISODES.jsonl", episodes, "episode_id")
+    check_lifecycle("INCIDENTS.jsonl", incidents, "incident_id")
+    active_incidents = {r["incident_id"] for r in current_rows(incidents, "incident_id")}
     ordinals: dict[str, set[int]] = {}
     for row in incidents:
         loc = where("INCIDENTS.jsonl", row)
         episode = episodes_by_id.get(row["episode_id"])
         require(episode is not None, f"{loc}: unknown episode_id {row['episode_id']}")
         seen = ordinals.setdefault(row["episode_id"], set())
-        require(row["ordinal"] not in seen, f"{loc}: duplicate ordinal {row['ordinal']} within episode {row['episode_id']}")
-        seen.add(row["ordinal"])
+        require(row["incident_id"] not in active_incidents or row["ordinal"] not in seen, f"{loc}: duplicate ordinal {row['ordinal']} within episode {row['episode_id']}")
+        if row["incident_id"] in active_incidents:
+            seen.add(row["ordinal"])
         source_ref = row.get("source_ref")
         if source_ref is not None:
             require(
@@ -245,6 +252,17 @@ def validate_packet(root: Path) -> None:
         for ref in row["refs"]:
             require(ref in referable_ids, f"{loc}: refs cites unknown identity {ref}")
     check_lifecycle("MEMOS.jsonl", memos, "memo_id")
+    if manifest.get("workflow_profile") == "source-bound-v1":
+        from source_bound import validate_bound_cycle
+        try:
+            validate_bound_cycle(root, manifest, {
+                "EPISODES.jsonl": episodes, "INCIDENTS.jsonl": incidents,
+                "CODES.jsonl": codes, "COMPARISONS.jsonl": comparisons,
+                "CATEGORY_MEMOS.jsonl": category_memos, "MEMOS.jsonl": memos,
+                "SAMPLING_REQUESTS.jsonl": sampling,
+            })
+        except (ValueError, OSError) as exc:
+            raise PacketError(str(exc)) from exc
 
 
 def main() -> int:

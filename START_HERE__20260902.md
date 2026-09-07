@@ -1,5 +1,10 @@
 # START HERE — grounded-theory fire orders, 2026-09-02
 
+> Historical project record. For current installation and use, start with
+> [README.md](README.md) and [STATUS.md](STATUS.md). The dated instructions below
+> apply only to their original project scope. They do not launch work, grant
+> data-processing authority, or require companion repositories for public users.
+
 **Read this first on any machine.** It carries the current Operator rulings
 and the two fire orders that are live. Everything else in this repository is
 method, contract, or plan; nothing else authorizes work.

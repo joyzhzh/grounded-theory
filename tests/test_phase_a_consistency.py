@@ -10,7 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 START = "START_HERE__20260902.md"
 STATE = "`FIRE ORDERS ISSUED 2026-09-02 — NOT EXECUTED`"
-STATE_FILES = ("README.md", "STATUS.md", "MISSION_PORTFOLIO.md", "RESEARCH_AGENDA.md")
+STATE_FILES = ("MISSION_PORTFOLIO.md", "RESEARCH_AGENDA.md")
+CURRENT_STATE_FILES = ("README.md", "STATUS.md")
 ENTRY_POINT_FILES = ("README.md", "STATUS.md", "AGENTS.md")
 # Wording retired by dated decisions. DECISIONS.md is history and may quote it.
 RETIRED_WORDING = (
@@ -34,12 +35,15 @@ def documents() -> list[Path]:
 
 
 class PhaseAConsistencyTest(unittest.TestCase):
-    def test_state_string_is_uniform(self) -> None:
+    def test_current_and_historical_states_are_distinguished(self) -> None:
+        for name in CURRENT_STATE_FILES:
+            with self.subTest(current_file=name):
+                self.assertIn("`USABLE_V1`", (ROOT / name).read_text(encoding="utf-8"))
         for name in STATE_FILES:
             with self.subTest(file=name):
                 self.assertIn(STATE, (ROOT / name).read_text(encoding="utf-8"))
 
-    def test_start_memo_is_the_entry_point(self) -> None:
+    def test_historical_start_memo_remains_linked(self) -> None:
         self.assertTrue((ROOT / START).is_file())
         for name in ENTRY_POINT_FILES:
             with self.subTest(file=name):

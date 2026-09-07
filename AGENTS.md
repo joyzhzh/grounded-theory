@@ -3,8 +3,11 @@
 This repository contains a grounded-theory research program and reusable tool,
 not live study data or automatically admitted research evidence.
 
-- Read `START_HERE__20260902.md` first; it carries the current rulings and
-  fire orders. No other file authorizes work.
+- Start with `README.md` and `SKILL.md` for current use.
+  `START_HERE__20260902.md` preserves historical project rulings and launch
+  orders; those are not instructions to activate work in a new installation.
+  Later dated decisions and the current user's explicit instructions govern
+  authorized work. Reuse applicable authority; do not reopen completed gates.
 
 - Never commit trace datasets, prompts from a real project, source captures,
   transcripts, audiovisual files, personal data, credentials, or restricted

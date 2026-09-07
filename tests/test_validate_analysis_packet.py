@@ -35,7 +35,7 @@ class AnalysisPacketValidationTest(unittest.TestCase):
 
     def make_packet(self) -> Path:
         root = Path(tempfile.mkdtemp(prefix="gt-packet-test-"))
-        self.addCleanup(shutil.rmtree, root, ignore_errors=True)
+        # Retain synthetic scratch under the machine-wide no-permanent-deletion rule.
         packet = root / "C001"
         shutil.copytree(FIXTURE, packet)
         return packet
@@ -182,7 +182,7 @@ class AnalysisPacketValidationTest(unittest.TestCase):
 
     def test_missing_comparisons_file_fails(self) -> None:
         packet = self.make_packet()
-        (packet / "COMPARISONS.jsonl").unlink()
+        (packet / "COMPARISONS.jsonl").rename(packet / "COMPARISONS.preserved.jsonl")
         self.assert_fails(packet, "COMPARISONS.jsonl")
 
     def test_emerging_category_without_comparison_fails(self) -> None:

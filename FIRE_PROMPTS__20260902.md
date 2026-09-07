@@ -1,3 +1,9 @@
+# Historical launch prompts
+
+The original project prompts below are retained for provenance. They are not
+current startup instructions and do not authorize a new user's study. Use
+[AGENT_STARTER.md](AGENT_STARTER.md) for the reusable workflow.
+
 # Fire prompts — paste one per Codex session
 
 Each prompt is self-contained for a fresh Codex session on any machine. Fill

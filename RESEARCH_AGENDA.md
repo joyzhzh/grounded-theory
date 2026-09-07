@@ -1,5 +1,9 @@
 # Research agenda
 
+> Historical development plan. Current software status and usage are in
+> [README.md](README.md) and [STATUS.md](STATUS.md). Project-specific launch
+> instructions here do not activate a new study.
+
 **State:** `FIRE ORDERS ISSUED 2026-09-02 — NOT EXECUTED` (see [START_HERE__20260902.md](START_HERE__20260902.md))
 **Proposed program:** Grounded Theory
 **Proposed missions:** `GT-M01`, `GT-M02`

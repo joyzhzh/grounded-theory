@@ -1,126 +1,93 @@
 ---
 name: grounded-theory
-description: Conduct auditable grounded-theory-oriented analysis through episode reconstruction, initial coding, constant comparison, memoing, theoretical sampling, negative-case analysis, and provenance-bound paper handoff. Use for learning or applying grounded-theory techniques to an authorized qualitative study; do not use it to acquire evidence, infer cognition from behavior, or autonomously declare saturation.
+description: Reconstruct episodes and analyze authorized qualitative traces through source-near coding, constant comparison, versioned memos and categories, negative cases, and discriminating sampling drafts. Use for an inductive process study using grounded-theory techniques and its analysis handoff; does not acquire data or certify saturation.
 ---
 
 # Grounded Theory
 
-Build process theory from authorized data without collapsing observation,
-interpretation, inference, and theory.
+Help the analyst build an inspectable account from authorized qualitative data.
+Use the label **inductive process study using grounded-theory techniques**.
+Treat the model's codes and explanations as proposals to inspect against sources.
 
-## Choose a mode
+## Choose the work
 
-- `orient` — explain the method, inspect the proposed study boundary, and draft
-  a study charter. Do not ingest data.
-- `prepare` — validate data authority, the source manifest, episode boundary,
-  methodological profile, and external-vault layout.
-- `pilot-code` — reconstruct and initial-code one explicitly bounded input
-  packet. Preserve temporal order and uncertainty.
-- `compare` — perform constant comparison and append comparison records,
-  category changes, negative cases, and memos.
-- `sample` — prepare a bounded theoretical-sampling request. Do not acquire
-  sources or contact people.
-- `integrate` — propose a provisional process model with rivals, conditions,
-  consequences, falsifiers, and unresolved questions.
-- `audit` — independently replay source bindings, epistemic classes,
-  comparisons, negative cases, category changes, and stop language.
-- `paper-handoff` — export a reviewed `GT_LITE` package. Do not clear or
-  publish a paper.
-- `draft-paper` — in a separately authorized author seat, draft from one
-  immutable, independently adjudicated `GT_LITE` and current evidence package.
-  Produce `DRAFT_NON_RELEASE`; add no unbound claim or new evidence.
+| Mode | Result | Read when needed |
+|---|---|---|
+| `orient` | Explain choices and draft the study question/boundary; no ingestion | [Method basis](references/methods-basis.md), [study charter](templates/STUDY_CHARTER.md) |
+| `prepare` | Freeze exact authorized input bindings and a new external cycle | [Local workflow](references/workflow.md) |
+| `pilot-code` | Reconstruct episodes, incidents and source-near initial codes within the authorized bound | [Analysis contract](references/grounded-theory-contract.md), [local workflow](references/workflow.md) |
+| `compare` | Record substantive comparisons, negative-case consequences and successor category/memo versions | [Analysis contract](references/grounded-theory-contract.md), [packet contract](references/analysis-packet-contract.md) |
+| `sample` | Draft the contrast that would distinguish a live explanation from its rival | [Packet contract](references/analysis-packet-contract.md), [vault interface](references/vault-interface.md) |
+| `integrate` | Propose transitions, mechanisms, rivals, falsifiers and remaining gaps | [Method basis](references/methods-basis.md), [theory memo](templates/THEORY_MEMO.md) |
+| `audit` | From a nonproducing seat, inspect source fidelity and reasoning as well as links | [Analysis contract](references/grounded-theory-contract.md) |
+| `paper-handoff` | Package current reviewed analysis with its unresolved limits | [Local workflow](references/workflow.md), [vault interface](references/vault-interface.md) |
+| `draft-paper` | In an authorized author seat, draft from immutable independently reviewed inputs | [Paper charter](templates/PAPER_DRAFT_CHARTER.md) |
 
-Read [references/grounded-theory-contract.md](references/grounded-theory-contract.md)
-before `pilot-code`, `compare`, `integrate`, or `audit`. Read
-[references/analysis-packet-contract.md](references/analysis-packet-contract.md)
-before writing a cycle packet. Read
-[references/vault-interface.md](references/vault-interface.md) before `sample`
-or `paper-handoff`, and read
-[templates/PAPER_DRAFT_CHARTER.md](templates/PAPER_DRAFT_CHARTER.md) before
-`draft-paper`.
+Load the references for the requested mode, not every reference by default.
+The [local workflow](references/workflow.md) has runnable commands and a synthetic
+example. Python 3.9+ with `jsonschema` is required for the deterministic helpers.
 
-## Required preflight
+## Start a cycle
 
-Before reading real data, confirm:
+Use the user's named study and exact authorized inputs. Record the question,
+method profile, rights/privacy/retention and model-processing authority before
+reading real data. Reuse existing applicable authorization; ask only for a
+missing fact that actually gates the requested action. Revised C001 rulings 4/5
+have a specific `license: UNKNOWN` allowance; it is not a global rights waiver.
+No real-data pilot is authorized merely by invoking this skill.
 
-1. the user named the study workspace and exact authorized inputs;
-2. the methodological profile and research question are frozen for this cycle;
-3. the `.vault-root` resolves outside this Git repository;
-4. consent, privacy, retention, access, redaction, and model-processing
-   authority are recorded;
-5. every input has stable identity, hash, locator, and rights/privacy state;
-6. the cycle ID and frozen input manifest are new; and
-7. the analytical seat and independent reviewer are distinct.
+Keep the study root outside every Git checkout, with no checkout inside it.
+The ignored `.vault-root` points to the local study parent; commands take an
+explicit `--study-root`. Source bytes, real prompts and outputs stay there.
+`prepare` binds inputs; it does not download or normalize them. Work from
+permitted normalized text with exact source/transform links. For raw media,
+first produce a separately authorized, traceable normalized export.
 
-If any requirement is unknown, stop before ingestion and report `HOLD` with the
-unknown. Never interpret unknown as permission.
+## Analyze and preserve decisions
 
-## Analytical cycle
+- Keep event order/time separate from presentation time. Record explicit or
+  uncertain starts/ends and missing intervals. A trace ending without outcome
+  evidence is `UNKNOWN`, never inferred acceptance or abandonment.
+- Assign each incident one of the seven [epistemic classes](references/grounded-theory-contract.md).
+  Behavior alone cannot establish belief. Creator-stated interpretation needs
+  an attributable statement and exact quotation binding; inference stays separate.
+- Use action-oriented initial coding; **prefer gerunds where they capture
+  process**. Keep source language, working translation, alternatives and rationale
+  inspectable. Do not seed initial codes with the project's candidate theory.
+- Comparisons name operands, purpose, observation, rival, discriminating evidence
+  and analytical consequence. A similarity score or filled template is insufficient.
+- Keep **descriptive, comparison, methodological and theoretical** memos distinct.
+  Category versions expose properties/dimensions, conditions/consequences,
+  support, boundaries and countercases. A negative case needs a reasoned response:
+  revise, split, bound, retire, justify retention, or preserve unresolved status.
+- Append a new identity with `supersedes` and a reason. Never edit a historical row
+  to mark it obsolete; successors determine the current view. Continue a sealed
+  cycle into a new directory. No deletion helper is provided.
+- Sampling drafts specify opposing expected observations and what an unavailable
+  contrast would leave unresolved. They stay `PROPOSED`; acquire nothing and
+  contact nobody without separate authority.
 
-1. Reconstruct complete episodes and mark inferred or uncertain boundaries.
-2. Split episodes into chronologically ordered incidents.
-3. Assign exactly one epistemic class to every incident.
-4. Produce action-oriented or source-native initial codes close to the data.
-5. Compare incidents, codes, episodes, creators, periods, outcomes, and
-   contrary pathways, and append each comparison as a `COMPARISONS.jsonl`
-   record naming what was compared, the relation, rivals, and what would
-   discriminate.
-6. Write descriptive, comparison, methodological, and theoretical memos as
-   separate record types in `MEMOS.jsonl`.
-7. Develop or revise categories only after recurring comparisons. Record the
-   definition, exclusions, properties, conditions, consequences, rivals,
-   supporting codes, the comparisons relied on, the counter-search performed,
-   and negative cases.
-8. Generate sampling requests that discriminate among explanations rather
-   than merely seek more examples.
-9. Validate the packet structurally with:
+The inherited four memo types and gerund preference are operative defaults.
+The proposed six-purpose taxonomy and optional-gerund amendment remain inactive,
+pending an explicit Operator decision. Memo/version formats and archive sampling
+are single-source proposals; they are not validated instruments.
 
-```bash
-python3 -B <skill-dir>/scripts/validate_analysis_packet.py <cycle-dir>
-```
+## Review and handoff
 
-10. Submit the packet for independent analytical review. The producing seat
-    cannot clear it.
+Validate byte bindings and declared structure, then inspect analytical fidelity.
+Checks can catch broken links, missing attribution bindings, rewritten history
+and absent response fields; they cannot judge whether an interpretation is true
+or a reason persuasive. The producing seat cannot clear its own analysis.
+A named reviewer is a planned role, not proof that review occurred.
 
-## Epistemic classes
+State the actual stop reason and missing contrasts. Repeated codes, a fixed
+corpus and a budget ceiling do not establish saturation. The strongest tool
+state is `PROVISIONAL_SUFFICIENCY_CANDIDATE`, pending independent and human review;
+“sufficiency” is inherited vocabulary, not an admitted Dey procedure.
 
-Use exactly one:
-
-- `OBSERVED_ACTION`
-- `CREATOR_REPORTED_ACTION`
-- `CREATOR_STATED_INTERPRETATION`
-- `THIRD_PARTY_INTERPRETATION`
-- `TECHNOLOGY_COMPANY_CLAIM`
-- `ANALYST_INFERENCE`
-- `THEORETICAL_CONSTRUCT`
-
-An observed action cannot establish a creator belief. An inference must point
-to its basis records. A construct must point to supporting codes and remains an
-analytical proposal, not empirical evidence.
-
-## Hard boundaries
-
-- Keep sensitizing concepts outside initial coding.
-- Never use the model's prior knowledge as empirical evidence.
-- Never promote discovery snippets, generic summaries, or marketing claims to
-  process evidence.
-- Never overwrite historical analysis; append a successor or retirement.
-- Never treat a validator PASS as substantive coding quality, evidence
-  admission, theory acceptance, release, or publication.
-- Never autonomously declare theoretical saturation. The strongest tool state
-  is `PROVISIONAL_SUFFICIENCY_CANDIDATE` pending independent and human review.
-- Never write real data or study outputs into this tool repository.
-- Never acquire sources, contact creators, or launch a research campaign from
-  a theoretical-sampling request without separate authority.
-- Never let the analytical producer, evidence adjudicator, paper author, or
-  release auditor silently collapse into one self-clearing seat.
-- In `draft-paper`, every substantive sentence must bind to a current
-  `GT_LITE` claim or be visibly marked as author framing; unresolved claims are
-  omitted or labelled, never repaired from model prior knowledge.
-
-## Output
-
-Lead with what the current data support, then state rivals, negative cases,
-unknowns, and the next discriminating sample. Prefer a small process model over
-a long theme list. Always state what would be missed if only final successful
-artifacts were observed.
+Keep outputs `NON_RELEASE`. A local handoff sends nothing and grants no admission,
+publication or release authority. A paper draft must bind substantive claims to
+current reviewed inputs; mark author framing and unresolved claims explicitly.
+LLM coding studies do not validate this agent's full analytical cycle. The
+[method basis](references/methods-basis.md) preserves source scopes and mandatory
+recheck qualifications, including the author-staffed evaluation in Q-C5.

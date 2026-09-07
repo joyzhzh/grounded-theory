@@ -115,8 +115,10 @@ naming the decision that changed the status, and `RETURNED` names the
 - Identities are unique within their file.
 - Every cited identity exists in the packet.
 - Supersession is explicit: a successor carries `supersedes` and
-  `supersession_reason`, a `RETIRED` row carries `retirement_reason`, and a
-  row marked `SUPERSEDED` inside a packet has its successor in that packet.
+  `supersession_reason`, names an earlier row, and cannot fork an existing chain.
+  Its predecessor stays byte-identical; successors determine current state. A
+  `RETIRED` row carries `retirement_reason`. Legacy rows already marked
+  `SUPERSEDED` still require a successor in the packet.
 - The producing seat cannot be the reviewing seat.
 
 ## Validator ceiling
@@ -124,3 +126,13 @@ naming the decision that changed the status, and `RETURNED` names the
 `validate_analysis_packet.py` checks structure and referential integrity. Its
 PASS does not establish source truth, coding fidelity, category quality,
 groundedness, sufficiency, saturation, evidence admission, or release.
+
+## Source-bound local workflow
+
+The optional `source-bound-v1` profile adds a frozen INPUT_MANIFEST.json, actual
+source/quote hash checks, explicit boundary and comparison consequences,
+negative-case response fields, inherited defaults, and previous-cycle byte
+preservation. See [workflow.md](workflow.md) for the complete field additions and
+commands. `HANDOFF.md` plus SHA256SUMS records submission without editing the
+manifest’s historical WORKING state. Neither structure nor byte-binding PASS
+establishes analytical validity.

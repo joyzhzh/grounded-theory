@@ -1,5 +1,9 @@
 # Phase A memo — Grounded Theory
 
+> Historical development plan. Current software status and usage are in
+> [README.md](README.md) and [STATUS.md](STATUS.md). Project-specific launch
+> instructions here do not activate a new study.
+
 **Date:** 2026-09-02
 **Decision state:** architecture draft; superseded for authority by `START_HERE__20260902.md` (fire orders issued 2026-09-02)
 **Provenance correction, 2026-09-02:** the pilot dataset is open-sourced third-party production-trace data, not data the Operator produced; rulings 4 and 5 in the START memo govern its use
